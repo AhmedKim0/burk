@@ -1,0 +1,6 @@
+@burk_HostAddress = http://localhost:5258
+
+GET {{burk_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
