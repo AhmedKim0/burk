@@ -11,11 +11,12 @@ namespace Burk.DAL.Entity
     public class AvaliableTable
     {
         [Required]
-        
+        [Key]
         public int TableId { get; set; }
         [Required]
-        public string ClientId { get; set; }
-        bool IsAvaliable { get; set; }
+        public int ClientId { get; set; }
+        public bool IsAvaliable { get; set; }
+        public Client Client { get; set; }
       
     }
 }

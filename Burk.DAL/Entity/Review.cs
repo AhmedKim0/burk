@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,7 +27,9 @@ namespace Burk.DAL.Entity
         public string? Comment4 { get; set; }//coment 4
         public int Question5 { get; set; }//Rate5
         public string? Comment5 { get; set; }//coment 5
-        public Client ClientId { get; set; } //Nav property one to many
+        //[ForeignKey("ClientId")]
+       //public int ClientId { get; set; } //Nav property one to many
+        public Client Client { get; set; }
 
 
 
