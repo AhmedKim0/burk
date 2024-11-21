@@ -8,9 +8,10 @@ using Burk.DAL.Interfaces;
 
 namespace Burk.DAL.Entity
 {
-    public class AvaliableTabel
+    public class AvaliableTable
     {
         [Required]
+        
         public int TableId { get; set; }
         [Required]
         public string ClientId { get; set; }
