@@ -1,4 +1,4 @@
-﻿using burk.DTO;
+﻿using Burk.DTO;
 
 using Burk.DAL.Entity;
 
@@ -13,7 +13,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace burk.Controllers
+namespace Burk.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]

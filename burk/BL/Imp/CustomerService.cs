@@ -1,4 +1,4 @@
-﻿namespace burk.BL.Imp;
+﻿namespace Burk.BL.Imp;
 
 public class CustomerService
 {

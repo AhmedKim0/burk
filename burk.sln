@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35201.131
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "burk", "burk\burk.csproj", "{7557F03A-A273-47B8-98FF-A3072F4BF38B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Burk", "burk\Burk.csproj", "{7557F03A-A273-47B8-98FF-A3072F4BF38B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Burk.DAL", "Burk.DAL\Burk.DAL.csproj", "{E3AE67A1-1278-4236-8D65-CC693CFF4650}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Burk.DAL", "Burk.DAL\Burk.DAL.csproj", "{E3AE67A1-1278-4236-8D65-CC693CFF4650}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Burk.Client", "Burk.Client\Burk.Client.csproj", "{9C21A724-F8AE-4B2D-97BD-1C191EE9FAC2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{E3AE67A1-1278-4236-8D65-CC693CFF4650}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E3AE67A1-1278-4236-8D65-CC693CFF4650}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E3AE67A1-1278-4236-8D65-CC693CFF4650}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C21A724-F8AE-4B2D-97BD-1C191EE9FAC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C21A724-F8AE-4B2D-97BD-1C191EE9FAC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C21A724-F8AE-4B2D-97BD-1C191EE9FAC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C21A724-F8AE-4B2D-97BD-1C191EE9FAC2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

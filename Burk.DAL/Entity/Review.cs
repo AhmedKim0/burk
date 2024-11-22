@@ -9,10 +9,9 @@ using Burk.DAL.Interfaces;
 
 namespace Burk.DAL.Entity
 {
-    public class Review 
+    public class Review :BaseAuditableEntity
     {
-        [Required]
-        [Key]
+
         public string CheckNo { get; set; }
         public int QuestionNumber { get; set; }
         public int? rate {  get; set; }

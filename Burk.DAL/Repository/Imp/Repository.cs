@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Burk.DAL.Repository.Imp
 {
-    internal class Repository<T>:IAsyncRepository<T> where T : BaseEntity
+    public class Repository<T>:IAsyncRepository<T> where T : BaseEntity
     {
         protected readonly BurkDbContext _dbContext;
 

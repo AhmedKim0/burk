@@ -12,9 +12,12 @@ namespace Burk.DAL.Entity
     {
         
         [Key]
-        public int TableId { get; set; }
+        public int Id { get; set; }
         [Required]
         public int ClientId { get; set; }
+
+        [Required]
+        public string TableNumber {  get; set; }
 
         public Client Client { get; set; }
       

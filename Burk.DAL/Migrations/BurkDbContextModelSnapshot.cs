@@ -84,6 +84,9 @@ namespace Burk.DAL.Migrations
                     b.Property<string>("CheckNo")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int>("AnswerType")
+                        .HasColumnType("int");
+
                     b.Property<int>("ClientId")
                         .HasColumnType("int");
 
@@ -127,8 +130,15 @@ namespace Burk.DAL.Migrations
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ReservationTime")
                         .HasColumnType("datetime2");
@@ -142,7 +152,7 @@ namespace Burk.DAL.Migrations
                     b.Property<Guid?>("UpdatedBy")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Visitors")
+                    b.Property<int?>("Visitors")
                         .HasColumnType("int");
 
                     b.Property<int>("area")

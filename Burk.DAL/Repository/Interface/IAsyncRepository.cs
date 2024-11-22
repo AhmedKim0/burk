@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Burk.DAL.Repository.Interface
 {
-    internal interface IAsyncRepository<T> where T : class
+    public interface IAsyncRepository<T> where T : class
     {
         Task<T> AddAsync(T entity, bool saveChanges = true);
         Task<IEnumerable<T>> AddRangeAsync(IEnumerable<T> entities, bool saveChanges = true);
