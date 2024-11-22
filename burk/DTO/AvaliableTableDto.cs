@@ -6,8 +6,8 @@ namespace burk.DTO
     {
         [Required]
         public int TableId { get; set; }
-        [Required]
-        public int ClientId { get; set; }
+       
+       
         public bool IsAvaliable { get; set; }
     }
 }

@@ -15,7 +15,7 @@ namespace Burk.DAL.Entity
         [Key]
         public string CheckNo { get; set; }
         [Required]
-        public string PhoneNumber { get; set; }
+        public string Phone { get; set; }
        
         public int Question1 { get; set; }//Rate1
         public string? Comment1 { get; set; }//coment 1
