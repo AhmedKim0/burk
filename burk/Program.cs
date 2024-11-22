@@ -1,4 +1,5 @@
 using System;
+using burk;
 using Burk.DAL.Context;
 using Burk.DAL.Entity;
 using Microsoft.AspNetCore.Identity;
@@ -14,7 +15,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<BurkDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefultConnetion")));
 builder.Services.AddIdentity<AppUser,IdentityRole>().AddEntityFrameworkStores<BurkDbContext>();
-
+builder.Services.AddBL();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
