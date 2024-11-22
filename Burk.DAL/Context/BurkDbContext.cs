@@ -14,21 +14,13 @@ namespace Burk.DAL.Context
         public BurkDbContext(DbContextOptions<BurkDbContext> options) : base(options)
         {
         }
-        // protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    modelBuilder.Entity<Review>()
-        //        .HasOne(r => r.Client)               // Navigation property
-        //        .WithMany(c => c.Reviews)            // Collection in Client
-        //        .HasForeignKey(r => r.ClientId);     // Foreign key in Review
-        //}
+
         public DbSet<Client> Clients { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<AceeptedUser> AceeptedUsers { get; set; }
         public DbSet<WaitingList> WaitingLists { get; set; }
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    modelBuilder.Entity<AvaliableTable>().HasNoKey(); // Indicates no primary key. }
-        //}
-       
-    }
+		public DbSet<AppUser> AppUsers { get; set; }
+
+
+	}
 }

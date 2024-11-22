@@ -4,8 +4,8 @@ namespace burk.DTO;
 
 public class LoginDTO
 {
-	[Required]
+	[Required(ErrorMessage = "userName is required.")]
 	public string userName { get; set; }
-	[Required]
+	[Required(ErrorMessage = "Password is required.")] 
 	public string password { get; set; }
 }

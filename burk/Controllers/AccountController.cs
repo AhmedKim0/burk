@@ -2,6 +2,7 @@
 
 using Burk.DAL.Entity;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -26,7 +27,8 @@ namespace burk.Controllers
 
 		private readonly UserManager<AppUser> _userManager;
 		private readonly IConfiguration configuration;
-
+		//[Authorize]
+		[Authorize(Roles = "Admin")]
 		[HttpPost("Register")]
 		public async Task<IActionResult> RegisterNewUser(RegistrationDTO user)
 		{
@@ -39,9 +41,26 @@ namespace burk.Controllers
 				};
 
 				IdentityResult result = await _userManager.CreateAsync(appUser, user.password);
+
 				if (result.Succeeded)
 				{
+					switch (user.role) 
+						{ 
+						case 1:
+					await _userManager.AddToRoleAsync(appUser, "Admin");
+							break;
+						case 2:
+							await _userManager.AddToRoleAsync(appUser, "Reserver");
+							break;
+						case 3:
+							await _userManager.AddToRoleAsync(appUser, "Waiter");
+							break;
+
+					}
+
+
 					return Ok("Success");
+					
 				}
 				else
 				{
@@ -54,7 +73,8 @@ namespace burk.Controllers
 			return BadRequest(ModelState);
 		}
 
-		[HttpPost]
+
+		[HttpPost("Login")]
 		public async Task<IActionResult> LogIn(LoginDTO login)
 		{
 			if (ModelState.IsValid)
@@ -81,7 +101,7 @@ namespace burk.Controllers
 							claims: claims,
 							issuer: configuration["JWT:Issuer"],
 							audience: configuration["JWT:Audience"],
-							expires: DateTime.Now.AddHours(1),
+							expires: DateTime.Now.AddHours(8),
 							signingCredentials: sc
 							);
 						var _token = new

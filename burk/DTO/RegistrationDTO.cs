@@ -8,6 +8,8 @@ namespace burk.DTO
         public string userName { get; set; }
         [Required]
         public string password { get; set; }
+		[Required]
+		public int role {  get; set; } // { 1"Admin", 2"Reserver",3 "Waiter" };
 
-    }
+	}
 }

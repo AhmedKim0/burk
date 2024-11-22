@@ -17,11 +17,12 @@ namespace Burk.DAL.Entity
         public int QuestionNumber { get; set; }
         public int? rate {  get; set; }
         public string? comment {  get; set; }
+        public int  AnswerType { get; set; }    
 
         public bool? yesOrNO { get; set; }
 
 
-       
+        public int ClientId  { get; set; }
 
         public Client Client { get; set; }
 
