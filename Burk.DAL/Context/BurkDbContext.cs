@@ -23,7 +23,7 @@ namespace Burk.DAL.Context
         //}
         public DbSet<Client> Clients { get; set; }
         public DbSet<Review> Reviews { get; set; }
-        public DbSet<AvaliableTable> AvaliableTabels { get; set; }
+        public DbSet<AceeptedUser> AceeptedUsers { get; set; }
         public DbSet<WaitingList> WaitingLists { get; set; }
         //protected override void OnModelCreating(ModelBuilder modelBuilder)
         //{

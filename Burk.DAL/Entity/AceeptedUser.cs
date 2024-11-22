@@ -8,14 +8,14 @@ using Burk.DAL.Interfaces;
 
 namespace Burk.DAL.Entity
 {
-    public class AvaliableTable
+    public class AceeptedUser
     {
-        [Required]
+        
         [Key]
         public int TableId { get; set; }
         [Required]
         public int ClientId { get; set; }
-        public bool IsAvaliable { get; set; }
+
         public Client Client { get; set; }
       
     }
