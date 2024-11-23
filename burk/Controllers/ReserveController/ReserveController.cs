@@ -43,9 +43,10 @@ public class ReserveController : ControllerBase
         return BadRequest(state);
     }
     [HttpDelete("RemoveUser")]
-    public async Task<IActionResult> RemoveAccepted(int id)
+    public async Task<IActionResult> RemoveUserWaiting(int id,bool IsLeaving)
+        // true if the customer came and false if the use was fake or didnot come
     {
-         await _reserveService.RemoveAccepted(id);
+         await _reserveService.RemoveUserWaiting(id, IsLeaving);
         
             return Ok("Removed");
        

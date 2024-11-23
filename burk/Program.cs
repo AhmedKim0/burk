@@ -32,7 +32,7 @@ builder.Services.AddIdentity<AppUser,IdentityRole>().AddEntityFrameworkStores<Bu
 
 builder.Services.AddScoped<IAsyncRepository<WaitingList>, Repository<WaitingList>>();
 builder.Services.AddScoped<IAsyncRepository<Client>, Repository<Client>>();
-builder.Services.AddScoped<IAsyncRepository<AcceptedUser>, Repository<AcceptedUser>>();
+builder.Services.AddScoped<IAsyncRepository<TempUser>, Repository<TempUser>>();
 builder.Services.AddScoped<IAsyncRepository<Review>, Repository<Review>>();
 
 builder.Services.AddScoped<IReserveService, ReserveService>();

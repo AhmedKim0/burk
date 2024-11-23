@@ -8,13 +8,13 @@ using Burk.DAL.Interfaces;
 
 namespace Burk.DAL.Entity
 {
-    public class AcceptedUser :  BaseAuditableEntity, IAuditable
+    public class TempUser :  BaseAuditableEntity, IAuditable
     {
         
 
 
         public int ClientId { get; set; }
-        public int WaitingListId { get; set; }
+        //public int WaitingListId { get; set; }
 
 		[Required]
         public int TableNumber {  get; set; }
@@ -24,7 +24,7 @@ namespace Burk.DAL.Entity
 
 		public int area { get; set; }
         public bool Smoking { get; set; }
-        public WaitingList WaitingList { get; set; }
+        //public WaitingList WaitingList { get; set; }
 
 
         public Client Client { get; set; }
