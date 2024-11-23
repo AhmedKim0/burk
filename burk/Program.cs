@@ -1,8 +1,11 @@
 using System;
 using System.Text;
 
+using Burk.Mapper;
 using Burk.DAL.Context;
 using Burk.DAL.Entity;
+using Burk.DAL.Repository.Imp;
+using Burk.DAL.Repository.Interface;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -23,6 +26,13 @@ builder.Services.AddDbContext<BurkDbContext>(options => options
 .UseSqlServer(builder.Configuration.GetConnectionString("DefultConnetion")));
 
 builder.Services.AddIdentity<AppUser,IdentityRole>().AddEntityFrameworkStores<BurkDbContext>();
+
+
+builder.Services.AddScoped<IAsyncRepository<WaitingList>, Repository<WaitingList>>();
+builder.Services.AddScoped<IAsyncRepository<Client>, Repository<Client>>();
+
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+
 
 builder.Services.AddAuthentication(o =>
 {

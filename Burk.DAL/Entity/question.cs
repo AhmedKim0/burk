@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Burk.DAL.Entity;
 internal class Question
 {
-	[Key]
+	
 	public int Id { get; set; }
 	public string data { get; set; }
 	public int type { get; set; }// 1 rate 2/comment 3/yesorno

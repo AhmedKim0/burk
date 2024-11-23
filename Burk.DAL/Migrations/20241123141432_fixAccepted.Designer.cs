@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Burk.DAL.Migrations
 {
     [DbContext(typeof(BurkDbContext))]
-    [Migration("20241122173228_InitalMigration")]
-    partial class InitalMigration
+    [Migration("20241123141432_fixAccepted")]
+    partial class fixAccepted
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,18 +25,36 @@ namespace Burk.DAL.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Burk.DAL.Entity.AceeptedUser", b =>
+            modelBuilder.Entity("Burk.DAL.Entity.AcceptedUser", b =>
                 {
-                    b.Property<int>("TableId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TableId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("AttendanceTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("ClientId")
                         .HasColumnType("int");
 
-                    b.HasKey("TableId");
+                    b.Property<DateTime>("ReservationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Smoking")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("TableNumber")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Visitors")
+                        .HasColumnType("int");
+
+                    b.Property<int>("area")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("ClientId");
 
@@ -82,16 +100,56 @@ namespace Burk.DAL.Migrations
                     b.ToTable("Clients");
                 });
 
+            modelBuilder.Entity("Burk.DAL.Entity.Question", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("data")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("type")
+                        .HasColumnType("int");
+
+                    b.ToTable("Question");
+                });
+
             modelBuilder.Entity("Burk.DAL.Entity.Review", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AnswerType")
+                        .HasColumnType("int");
+
                     b.Property<string>("CheckNo")
-                        .HasColumnType("nvarchar(450)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ClientId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<int>("QuestionNumber")
                         .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("comment")
                         .HasColumnType("nvarchar(max)");
@@ -102,7 +160,7 @@ namespace Burk.DAL.Migrations
                     b.Property<bool?>("yesOrNO")
                         .HasColumnType("bit");
 
-                    b.HasKey("CheckNo");
+                    b.HasKey("Id");
 
                     b.HasIndex("ClientId");
 
@@ -130,8 +188,15 @@ namespace Burk.DAL.Migrations
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ReservationTime")
                         .HasColumnType("datetime2");
@@ -145,7 +210,7 @@ namespace Burk.DAL.Migrations
                     b.Property<Guid?>("UpdatedBy")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Visitors")
+                    b.Property<int?>("Visitors")
                         .HasColumnType("int");
 
                     b.Property<int>("area")
@@ -220,6 +285,11 @@ namespace Burk.DAL.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(13)
+                        .HasColumnType("nvarchar(13)");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -271,6 +341,10 @@ namespace Burk.DAL.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasDiscriminator().HasValue("IdentityUser");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -354,7 +428,14 @@ namespace Burk.DAL.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Burk.DAL.Entity.AceeptedUser", b =>
+            modelBuilder.Entity("Burk.DAL.Entity.AppUser", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+
+                    b.HasDiscriminator().HasValue("AppUser");
+                });
+
+            modelBuilder.Entity("Burk.DAL.Entity.AcceptedUser", b =>
                 {
                     b.HasOne("Burk.DAL.Entity.Client", "Client")
                         .WithMany("AceeptedUser")

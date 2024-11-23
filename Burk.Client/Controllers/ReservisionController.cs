@@ -16,7 +16,7 @@ public class ReservisionController : ControllerBase
 
 
 	}
-	[HttpPost]
+	[HttpPost("Reserve a Table")]
 	public async Task<IActionResult> Reserve(WatinigListDto client)
 	{
 		if(ModelState.IsValid) {

@@ -28,7 +28,7 @@ namespace Burk.Controllers
 		private readonly UserManager<AppUser> _userManager;
 		private readonly IConfiguration configuration;
 		//[Authorize]
-		[Authorize(Roles = "Admin")]
+		//[Authorize(Roles = "Admin")]
 		[HttpPost("Register")]
 		public async Task<IActionResult> RegisterNewUser(RegistrationDTO user)
 		{

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Burk.DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class InitalMigration : Migration
+    public partial class fixAccepted : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -30,6 +30,7 @@ namespace Burk.DAL.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Discriminator = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -71,13 +72,27 @@ namespace Burk.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Question",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    data = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    type = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                });
+
+            migrationBuilder.CreateTable(
                 name: "WaitingLists",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ClientName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Visitors = table.Column<int>(type: "int", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Visitors = table.Column<int>(type: "int", nullable: true),
                     ReservationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     AttendanceTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     area = table.Column<int>(type: "int", nullable: false),
@@ -203,13 +218,19 @@ namespace Burk.DAL.Migrations
                 name: "AceeptedUsers",
                 columns: table => new
                 {
-                    TableId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ClientId = table.Column<int>(type: "int", nullable: false)
+                    ClientId = table.Column<int>(type: "int", nullable: false),
+                    TableNumber = table.Column<int>(type: "int", nullable: false),
+                    Visitors = table.Column<int>(type: "int", nullable: true),
+                    ReservationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AttendanceTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    area = table.Column<int>(type: "int", nullable: false),
+                    Smoking = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AceeptedUsers", x => x.TableId);
+                    table.PrimaryKey("PK_AceeptedUsers", x => x.Id);
                     table.ForeignKey(
                         name: "FK_AceeptedUsers_Clients_ClientId",
                         column: x => x.ClientId,
@@ -222,16 +243,24 @@ namespace Burk.DAL.Migrations
                 name: "Reviews",
                 columns: table => new
                 {
-                    CheckNo = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CheckNo = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     QuestionNumber = table.Column<int>(type: "int", nullable: false),
                     rate = table.Column<int>(type: "int", nullable: true),
                     comment = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AnswerType = table.Column<int>(type: "int", nullable: false),
                     yesOrNO = table.Column<bool>(type: "bit", nullable: true),
-                    ClientId = table.Column<int>(type: "int", nullable: false)
+                    ClientId = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UpdatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Reviews", x => x.CheckNo);
+                    table.PrimaryKey("PK_Reviews", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Reviews_Clients_ClientId",
                         column: x => x.ClientId,
@@ -310,6 +339,9 @@ namespace Burk.DAL.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Question");
 
             migrationBuilder.DropTable(
                 name: "Reviews");

@@ -17,10 +17,17 @@ namespace Burk.DAL.Context
 
         public DbSet<Client> Clients { get; set; }
         public DbSet<Review> Reviews { get; set; }
-        public DbSet<AceeptedUser> AceeptedUsers { get; set; }
+        public DbSet<AcceptedUser> AceeptedUsers { get; set; }
         public DbSet<WaitingList> WaitingLists { get; set; }
-		public DbSet<AppUser> AppUsers { get; set; }
+        public DbSet<AppUser> AppUsers { get; set; }
+		protected override void OnModelCreating(ModelBuilder builder)
+		{
+            builder.Entity<Question>().HasNoKey();
+			base.OnModelCreating(builder);
+		}
 
 
 	}
-}
+
+    
+ }
