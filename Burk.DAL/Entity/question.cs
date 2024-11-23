@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Burk.DAL.Entity;
-internal class Question
+public class Question
 {
 	
 	public int Id { get; set; }

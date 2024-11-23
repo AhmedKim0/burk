@@ -20,7 +20,8 @@ namespace Burk.DAL.Context
         public DbSet<AcceptedUser> AceeptedUsers { get; set; }
         public DbSet<WaitingList> WaitingLists { get; set; }
         public DbSet<AppUser> AppUsers { get; set; }
-		protected override void OnModelCreating(ModelBuilder builder)
+        public DbSet<Question> Questions { get; set; }
+        protected override void OnModelCreating(ModelBuilder builder)
 		{
             builder.Entity<Question>().HasNoKey();
 			base.OnModelCreating(builder);

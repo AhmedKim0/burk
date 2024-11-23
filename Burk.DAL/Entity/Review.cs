@@ -9,14 +9,15 @@ using Burk.DAL.Interfaces;
 
 namespace Burk.DAL.Entity
 {
-    public class Review :BaseAuditableEntity
-    {
-
+    public class Review :BaseAuditableEntity, IAuditable
+	{
+        [Required]
         public string CheckNo { get; set; }
         public int QuestionNumber { get; set; }
-        public int? rate {  get; set; }
+		public int AnswerType { get; set; }
+		public int? rate {  get; set; }
         public string? comment {  get; set; }
-        public int  AnswerType { get; set; }    
+  
 
         public bool? yesOrNO { get; set; }
 

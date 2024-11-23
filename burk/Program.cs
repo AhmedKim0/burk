@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Burk.BL.Interface;
+using Burk.BL.Imp;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = new ConfigurationBuilder().Build();
@@ -30,6 +32,10 @@ builder.Services.AddIdentity<AppUser,IdentityRole>().AddEntityFrameworkStores<Bu
 
 builder.Services.AddScoped<IAsyncRepository<WaitingList>, Repository<WaitingList>>();
 builder.Services.AddScoped<IAsyncRepository<Client>, Repository<Client>>();
+builder.Services.AddScoped<IAsyncRepository<AcceptedUser>, Repository<AcceptedUser>>();
+builder.Services.AddScoped<IAsyncRepository<Review>, Repository<Review>>();
+
+builder.Services.AddScoped<IReserveService, ReserveService>();
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 

@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Burk.Client\Burk.Client.csproj" />
     <ProjectReference Include="..\Burk.DAL\Burk.DAL.csproj" />
   </ItemGroup>
 

@@ -8,11 +8,10 @@ using Burk.DAL.Interfaces;
 
 namespace Burk.DAL.Entity
 {
-    public class AcceptedUser
+    public class AcceptedUser :  BaseAuditableEntity, IAuditable
     {
         
-        [Key]
-        public int Id { get; set; }
+
 
         public int ClientId { get; set; }
         public int WaitingListId { get; set; }

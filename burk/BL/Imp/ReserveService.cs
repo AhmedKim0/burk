@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 
+using Burk.BL.Interface;
 using Burk.DAL.Context;
 using Burk.DAL.Entity;
 using Burk.DAL.Repository.Interface;
@@ -11,7 +12,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Burk.BL.Imp;
 
-public class ReserveService
+public class ReserveService: IReserveService
 {
 	private readonly IAsyncRepository<WaitingList> _waitngRepo;
 	private readonly IAsyncRepository<AcceptedUser> _acceptRepo;
