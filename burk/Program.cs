@@ -35,7 +35,13 @@ builder.Services.AddScoped<IAsyncRepository<Client>, Repository<Client>>();
 builder.Services.AddScoped<IAsyncRepository<TempUser>, Repository<TempUser>>();
 builder.Services.AddScoped<IAsyncRepository<Review>, Repository<Review>>();
 
+
+
 builder.Services.AddScoped<IReserveService, ReserveService>();
+builder.Services.AddScoped<IQuestionService, QuestionService>();
+builder.Services.AddScoped<IReviewService, ReviewService>();
+
+
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 

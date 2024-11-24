@@ -1,4 +1,5 @@
-﻿using Burk.DAL.Context;
+﻿using Burk.BL.Interface;
+using Burk.DAL.Context;
 using Burk.DAL.Entity;
 using Burk.DAL.Repository.Interface;
 using Burk.DTO;
@@ -7,13 +8,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Burk.BL.Imp;
 
-public class QuestionService
+public class QuestionService: IQuestionService
 {
 	private readonly BurkDbContext _db;
 
 	public QuestionService(BurkDbContext db)
 	{
 		 _db = db ?? throw new ArgumentNullException(nameof(db));
+	}
+	public async Task<List<Question>> GetAllQuestions()
+	{
+		return await _db.Questions.ToListAsync();
 	}
 	public async Task<Question> AddQuestion(AddQuestionDTO questionDTO)
 	{
@@ -31,7 +36,7 @@ public class QuestionService
 			await _db.SaveChangesAsync();
 			return question;
 		}
-		return new Question();
+		return null;
 
 	}
 	public async Task<Question> EditQuestion(int id,EditQuestionDTO questionDTO)
@@ -49,22 +54,23 @@ public class QuestionService
 
 
 			}
-		return new Question(); 
+		return null;
 	}
 	public async Task<bool> DeleteQuestion(int id)
 	{
 
 		// there is more implemention we will disccuss about deleting reviews related to this question
-		var question = await _db.Questions.FirstOrDefaultAsync(q=>q.Id==id);
+		var question = await _db.Questions.FirstOrDefaultAsync(q => q.Id == id);
 		if (question != null)
 		{
-			 _db.Questions.Remove(question);
+			_db.Questions.Remove(question);
 			await _db.SaveChangesAsync();
 			return true;
 		}
 		return false;
 
 	}
+	
 
 
 

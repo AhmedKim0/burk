@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 
+using Burk.Client.DTO;
 using Burk.DAL.Entity;
+using Burk.DTO;
 
 namespace Burk.Mapper
 {
@@ -8,6 +10,7 @@ namespace Burk.Mapper
     {
         public MappingProfile()
         {
-           
-            }
+			CreateMap<ReviewDTO, Review>().ReverseMap();
+
+		}
 } }

@@ -19,12 +19,13 @@ namespace Burk.Controllers
 	[ApiController]
 	public class AccountController : ControllerBase
 	{
-		public AccountController(UserManager<AppUser> userManager, IConfiguration configuration)
+		public AccountController(UserManager<AppUser> userManager, IConfiguration configuration, RoleManager<IdentityRole> roleManager)
 		{
 			_userManager = userManager;
 			this.configuration = configuration;
+			_roleManager = roleManager;
 		}
-
+		private readonly RoleManager<IdentityRole> _roleManager;
 		private readonly UserManager<AppUser> _userManager;
 		private readonly IConfiguration configuration;
 		//[Authorize]
@@ -123,5 +124,26 @@ namespace Burk.Controllers
 			}
 			return BadRequest(ModelState);
 		}
+		
+		[HttpGet("GetUsersWithRoles")]
+		public async Task<IActionResult> GetUsersWithRoles()
+		{
+			var users = _userManager.Users.ToList();
+			var userWithRoles = new List<UserWithRolesDTO>();
+
+			foreach (var user in users)
+			{
+				var roles = await _userManager.GetRolesAsync(user);
+				userWithRoles.Add(new UserWithRolesDTO
+				{
+					UserId = user.Id,
+					UserName = user.UserName,
+					Roles = roles.ToList()
+				});
+			}
+			//var usersWithRoles = await _userService.GetAllUsersWithRolesAsync();
+			return Ok(userWithRoles);
+		}
+
 	}
 }
