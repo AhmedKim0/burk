@@ -1,4 +1,5 @@
 ﻿using Burk.BL.Imp;
+using Burk.BL.Interface;
 using Burk.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -8,14 +9,31 @@ namespace Burk.Controllers.ReserveController;
 [ApiController]
 public class ReserveController : ControllerBase
 {
-    private readonly ReserveService _reserveService;
+    private readonly IReserveService _reserveService;
 
-    public ReserveController(ReserveService reserveService)
-	{
+    public ReserveController(IReserveService reserveService)
+    {
         _reserveService = reserveService;
+    }
+	[HttpGet("GetAllWaitingList")]
+	public async Task<IActionResult> GetAllWaitingList()
+    {   var list =await _reserveService.GetWaitingListAsync();
+        return Ok(list);
+
+    }
+	[HttpGet("GetAllAcceptedList")]
+	public async Task<IActionResult> GetAllAcceptedList()
+	{
+		var list = await _reserveService.GetAcceptedUserAsync();
+		return Ok(list);
+
 	}
 
-    [HttpPost("AcceptUser")]
+
+
+
+
+	[HttpPost("AcceptUser")]
     public async Task<IActionResult> AcceptUser(int id, int tablenumber)
     {
 
@@ -46,10 +64,12 @@ public class ReserveController : ControllerBase
     public async Task<IActionResult> RemoveUserWaiting(int id,bool IsLeaving)
         // true if the customer came and false if the use was fake or didnot come
     {
+        if (ModelState.IsValid) { 
          await _reserveService.RemoveUserWaiting(id, IsLeaving);
         
             return Ok("Removed");
-       
+        }
+        return BadRequest();
 
     }
 

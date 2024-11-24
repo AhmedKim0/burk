@@ -32,32 +32,13 @@ public class ReserveService: IReserveService
 
 	public async Task<List<WaitingList>> GetWaitingListAsync()
 		{
-		return await _waitngRepo.ListAllAsync(false);
+		return await _waitngRepo.ListAsync(x=>x.IsAccepted==false,false);
 
 	}
-	public async Task<List<AcceptedUserDTO>> GetAcceptedUserAsync()
+	public async Task<List<WaitingList>> GetAcceptedUserAsync()
 	{
-		List<AcceptedUserDTO> DTOs = new List<AcceptedUserDTO>();
-		List<WaitingList> accpetedUsers = await _waitngRepo.ListAsync(a=>a.IsAccepted==true,false);
-		foreach (var user in accpetedUsers)
-		{
-			AcceptedUserDTO dto = new AcceptedUserDTO()
-			{
-				Id = user.Id,
-				Clientname = user.ClientName,
-				TableNumber = (int)user.TableNumber,
-				Visitors = user.Visitors,
-				ReservationTime = user.ReservationTime,
-				AttendanceTime = user.AttendanceTime,
+		return await _waitngRepo.ListAsync(x => x.IsAccepted == true, false);
 
-				area = user.area,
-				Smoking = user.Smoking
-			};
-
-			DTOs.Add(dto);
-
-		}
-		return DTOs;
 	}
 
 
@@ -119,10 +100,11 @@ public class ReserveService: IReserveService
 	
 
 	}
-	 public async Task RemoveUserWaiting(int id,bool Isleaving)
+	 public async Task<string> RemoveUserWaiting(int id,bool Isleaving)
 	{
 		var user = await _waitngRepo.FirstOrDefaultAsync(w => w.Id == id);
-		if(Isleaving&&user.IsAccepted)
+		if (user != null) {
+		if(Isleaving )
 		{
 			TempUser temp = new TempUser()
 			{
@@ -140,8 +122,12 @@ public class ReserveService: IReserveService
 			};
 			await _tempRepo.AddAsync(temp);
 			await _waitngRepo.DeleteAsync(user);
+				return "done";
 		}
 		await _waitngRepo.DeleteAsync(user);
+			return "done";
+		}
+		return "failed";
 	}
 	//public async Task RemoveAccepted(int id)
 	//{

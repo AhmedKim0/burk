@@ -16,7 +16,18 @@ using Burk.BL.Interface;
 using Burk.BL.Imp;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddCors(options =>
+{
+	options.AddPolicy("AllowOrigin", builder =>
+	{
+		builder.AllowAnyOrigin()  // Your allowed domain
+			   .AllowAnyMethod()
+			   .AllowAnyHeader();
+	});
+});
 var configuration = new ConfigurationBuilder().Build();
+
 
 // Add services to the container.
 
@@ -80,6 +91,9 @@ builder.Services.AddSwaggerGen(o =>
 		}
 	});
 
+
+
+
 	o.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
 	{
 		Name = "Authorization",
@@ -116,11 +130,11 @@ using (var scope = app.Services.CreateScope())
 }
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-	app.UseSwagger();
-	app.UseSwaggerUI();
-}
+app.UseDeveloperExceptionPage();
+app.UseSwagger();
+app.UseSwaggerUI();
+
+app.UseCors("AllowOrigin");
 
 app.UseHttpsRedirection();
 

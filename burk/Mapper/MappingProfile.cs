@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-using Burk.Client.DTO;
+
 using Burk.DAL.Entity;
 using Burk.DTO;
 

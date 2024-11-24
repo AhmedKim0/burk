@@ -28,7 +28,7 @@ public class QuestionService: IQuestionService
 		{
 			Question question = new Question()
 			{
-				Id = questionDTO.Id,
+				QuestionNumber=questionDTO.QuestionNumber,
 				data = questionDTO.data,
 				type = questionDTO.type
 
@@ -40,9 +40,9 @@ public class QuestionService: IQuestionService
 		return null;
 
 	}
-	public async Task<Question> EditQuestion(int id,EditQuestionDTO questionDTO)
+	public async Task<Question> EditQuestion(int questionumber,EditQuestionDTO questionDTO)
 	{
-		var question = await _questionRepository.FirstOrDefaultAsync(x => x.Id == id);
+		var question = await _questionRepository.FirstOrDefaultAsync(x => x.QuestionNumber == questionumber);
 		if(!(question == null && questionDTO==null))
 			{ 
 

@@ -4,6 +4,7 @@ using Burk.DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Burk.DAL.Migrations
 {
     [DbContext(typeof(BurkDbContext))]
-    partial class BurkDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241124114040_last")]
+    partial class last
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -218,7 +221,7 @@ namespace Burk.DAL.Migrations
                     b.Property<DateTime>("AttendanceTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ClientId")
+                    b.Property<int?>("ClientId")
                         .HasColumnType("int");
 
                     b.Property<string>("ClientName")
@@ -514,13 +517,9 @@ namespace Burk.DAL.Migrations
 
             modelBuilder.Entity("Burk.DAL.Entity.WaitingList", b =>
                 {
-                    b.HasOne("Burk.DAL.Entity.Client", "client")
+                    b.HasOne("Burk.DAL.Entity.Client", null)
                         .WithMany("WaitingList")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("client");
+                        .HasForeignKey("ClientId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

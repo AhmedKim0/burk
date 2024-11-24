@@ -2,8 +2,8 @@
 
 namespace Burk.Client.BL.Interfaces
 {
-    public interface IReserveService
-    {
+    public interface IUserReserveService
+	{
 		Task<string> AddReservaiton(WatinigListDto waiting);
 
 	}

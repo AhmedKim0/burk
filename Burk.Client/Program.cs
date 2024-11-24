@@ -12,6 +12,15 @@ using Burk.Client.Mapper;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddCors(options =>
+{
+	options.AddPolicy("AllowOrigin", builder =>
+	{
+		builder.AllowAnyOrigin()  // Your allowed domain
+			   .AllowAnyMethod()
+			   .AllowAnyHeader();
+	});
+});
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -21,19 +30,19 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<BurkDbContext>(options=>options.UseSqlServer(builder.Configuration.GetConnectionString("ClientConnection")));
 builder.Services.AddScoped<IAsyncRepository<WaitingList>, Repository<WaitingList>>();
 builder.Services.AddScoped<IAsyncRepository<Client>, Repository<Client>>();
-builder.Services.AddScoped<IReserveService, ReserveService>();
+builder.Services.AddScoped<IUserReserveService, UserReserveService>();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseDeveloperExceptionPage();
 
+app.UseSwagger();
+app.UseSwaggerUI();
+
+app.UseCors("AllowOrigin");
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

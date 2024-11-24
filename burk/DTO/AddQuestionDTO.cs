@@ -4,8 +4,7 @@ namespace Burk.DTO;
 
 public class AddQuestionDTO
 {
-	[Required]
-	public int Id { get; set; }
+
 	[Required] 
 	public int QuestionNumber { get;set; }
 	[Required]

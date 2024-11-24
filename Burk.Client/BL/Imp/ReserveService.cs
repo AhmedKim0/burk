@@ -7,13 +7,13 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Burk.Client.BL.Imp
 {
-    public class ReserveService:IReserveService
-    {
+    public class UserReserveService: IUserReserveService
+	{
         private readonly IAsyncRepository<WaitingList> _waitinigRepo;
         private readonly IAsyncRepository<DAL.Entity.Client> _clientRepo;
         private readonly IMapper _mapper;
 
-        public ReserveService(IAsyncRepository<WaitingList> waitinigRepo,
+        public UserReserveService(IAsyncRepository<WaitingList> waitinigRepo,
             IAsyncRepository<Burk.DAL.Entity.Client> clientRepo,
             IMapper mapper
            )
@@ -33,16 +33,21 @@ namespace Burk.Client.BL.Imp
                     Name = waiting.ClientName,
                     PhoneNumber = waiting.PhoneNumber,
                     Email = waiting.Email,
+                    
 
                 };
 				WaitingList waitinglist = _mapper.Map<WaitingList>(waiting);
-				await _clientRepo.AddAsync(addClient);
-				await _waitinigRepo.AddAsync(waitinglist);
+
+				client= await _clientRepo.AddAsync(addClient);
+				waitinglist.ClientId =client.Id;
+                await _waitinigRepo.AddAsync(waitinglist);
                 return "success and new";
 			}
             else
             {
 				WaitingList waitinglist = _mapper.Map<WaitingList>(waiting);
+				client = await _clientRepo.FirstOrDefaultAsync(c => c.PhoneNumber == waiting.PhoneNumber);
+				waitinglist.ClientId = client.Id;
 				await  _waitinigRepo.AddAsync(waitinglist);
 				return "success";
 
