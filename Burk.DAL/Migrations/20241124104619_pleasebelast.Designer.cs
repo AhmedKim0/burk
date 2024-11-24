@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Burk.DAL.Migrations
 {
     [DbContext(typeof(BurkDbContext))]
-    [Migration("20241124091852_fixlast")]
-    partial class fixlast
+    [Migration("20241124104619_pleasebelast")]
+    partial class pleasebelast
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -67,7 +67,28 @@ namespace Burk.DAL.Migrations
             modelBuilder.Entity("Burk.DAL.Entity.Question", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("QuestionNumber")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("data")
                         .IsRequired()
@@ -75,6 +96,8 @@ namespace Burk.DAL.Migrations
 
                     b.Property<int>("type")
                         .HasColumnType("int");
+
+                    b.HasKey("Id");
 
                     b.ToTable("Questions");
                 });
@@ -106,6 +129,9 @@ namespace Burk.DAL.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("QuestionId")
+                        .HasColumnType("int");
+
                     b.Property<int>("QuestionNumber")
                         .HasColumnType("int");
 
@@ -127,6 +153,8 @@ namespace Burk.DAL.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId");
+
+                    b.HasIndex("QuestionId");
 
                     b.ToTable("Reviews");
                 });
@@ -469,6 +497,10 @@ namespace Burk.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Burk.DAL.Entity.Question", null)
+                        .WithMany("reviews")
+                        .HasForeignKey("QuestionId");
+
                     b.Navigation("Client");
                 });
 
@@ -552,6 +584,11 @@ namespace Burk.DAL.Migrations
                     b.Navigation("TempUsers");
 
                     b.Navigation("WaitingList");
+                });
+
+            modelBuilder.Entity("Burk.DAL.Entity.Question", b =>
+                {
+                    b.Navigation("reviews");
                 });
 #pragma warning restore 612, 618
         }

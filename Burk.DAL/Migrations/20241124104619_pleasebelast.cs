@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Burk.DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class fixAccepted : Migration
+    public partial class pleasebelast : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -72,31 +72,14 @@ namespace Burk.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Question",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false),
-                    data = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    type = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                });
-
-            migrationBuilder.CreateTable(
-                name: "WaitingLists",
+                name: "Questions",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ClientName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Visitors = table.Column<int>(type: "int", nullable: true),
-                    ReservationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    AttendanceTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    area = table.Column<int>(type: "int", nullable: false),
-                    Smoking = table.Column<bool>(type: "bit", nullable: false),
+                    QuestionNumber = table.Column<int>(type: "int", nullable: false),
+                    data = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    type = table.Column<int>(type: "int", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -105,7 +88,7 @@ namespace Burk.DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_WaitingLists", x => x.Id);
+                    table.PrimaryKey("PK_Questions", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -215,7 +198,7 @@ namespace Burk.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AceeptedUsers",
+                name: "TempUsers",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -226,13 +209,52 @@ namespace Burk.DAL.Migrations
                     ReservationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     AttendanceTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     area = table.Column<int>(type: "int", nullable: false),
-                    Smoking = table.Column<bool>(type: "bit", nullable: false)
+                    Smoking = table.Column<bool>(type: "bit", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UpdatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AceeptedUsers", x => x.Id);
+                    table.PrimaryKey("PK_TempUsers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AceeptedUsers_Clients_ClientId",
+                        name: "FK_TempUsers_Clients_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Clients",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "WaitingLists",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ClientId = table.Column<int>(type: "int", nullable: false),
+                    ClientName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Visitors = table.Column<int>(type: "int", nullable: true),
+                    TableNumber = table.Column<int>(type: "int", nullable: true),
+                    ReservationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AttendanceTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsAccepted = table.Column<bool>(type: "bit", nullable: false),
+                    area = table.Column<int>(type: "int", nullable: false),
+                    Smoking = table.Column<bool>(type: "bit", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UpdatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WaitingLists", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_WaitingLists_Clients_ClientId",
                         column: x => x.ClientId,
                         principalTable: "Clients",
                         principalColumn: "Id",
@@ -247,11 +269,12 @@ namespace Burk.DAL.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CheckNo = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     QuestionNumber = table.Column<int>(type: "int", nullable: false),
+                    AnswerType = table.Column<int>(type: "int", nullable: false),
                     rate = table.Column<int>(type: "int", nullable: true),
                     comment = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    AnswerType = table.Column<int>(type: "int", nullable: false),
                     yesOrNO = table.Column<bool>(type: "bit", nullable: true),
                     ClientId = table.Column<int>(type: "int", nullable: false),
+                    QuestionId = table.Column<int>(type: "int", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -267,12 +290,12 @@ namespace Burk.DAL.Migrations
                         principalTable: "Clients",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Reviews_Questions_QuestionId",
+                        column: x => x.QuestionId,
+                        principalTable: "Questions",
+                        principalColumn: "Id");
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AceeptedUsers_ClientId",
-                table: "AceeptedUsers",
-                column: "ClientId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -317,14 +340,26 @@ namespace Burk.DAL.Migrations
                 name: "IX_Reviews_ClientId",
                 table: "Reviews",
                 column: "ClientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reviews_QuestionId",
+                table: "Reviews",
+                column: "QuestionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TempUsers_ClientId",
+                table: "TempUsers",
+                column: "ClientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WaitingLists_ClientId",
+                table: "WaitingLists",
+                column: "ClientId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "AceeptedUsers");
-
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -341,10 +376,10 @@ namespace Burk.DAL.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Question");
+                name: "Reviews");
 
             migrationBuilder.DropTable(
-                name: "Reviews");
+                name: "TempUsers");
 
             migrationBuilder.DropTable(
                 name: "WaitingLists");
@@ -354,6 +389,9 @@ namespace Burk.DAL.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Questions");
 
             migrationBuilder.DropTable(
                 name: "Clients");

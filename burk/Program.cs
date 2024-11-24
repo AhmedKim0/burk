@@ -34,6 +34,7 @@ builder.Services.AddScoped<IAsyncRepository<WaitingList>, Repository<WaitingList
 builder.Services.AddScoped<IAsyncRepository<Client>, Repository<Client>>();
 builder.Services.AddScoped<IAsyncRepository<TempUser>, Repository<TempUser>>();
 builder.Services.AddScoped<IAsyncRepository<Review>, Repository<Review>>();
+builder.Services.AddScoped<IAsyncRepository<Question>, Repository<Question>>();
 
 
 

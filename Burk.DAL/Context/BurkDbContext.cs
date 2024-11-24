@@ -23,7 +23,7 @@ namespace Burk.DAL.Context
         public DbSet<Question> Questions { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
 		{
-            builder.Entity<Question>().HasNoKey();
+            
 			base.OnModelCreating(builder);
 		}
 

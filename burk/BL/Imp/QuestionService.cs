@@ -10,20 +10,21 @@ namespace Burk.BL.Imp;
 
 public class QuestionService: IQuestionService
 {
-	private readonly BurkDbContext _db;
+	private readonly IAsyncRepository<Question> _questionRepository;
 
-	public QuestionService(BurkDbContext db)
+	public QuestionService(IAsyncRepository<Question> questionRepository)
 	{
-		 _db = db ?? throw new ArgumentNullException(nameof(db));
+		_questionRepository = questionRepository ?? throw new ArgumentNullException(nameof(questionRepository));
 	}
+
 	public async Task<List<Question>> GetAllQuestions()
 	{
-		return await _db.Questions.ToListAsync();
+		return await _questionRepository.ListAllAsync();
 	}
 	public async Task<Question> AddQuestion(AddQuestionDTO questionDTO)
 	{
 		
-		if (questionDTO == null && !(await _db.Questions.AnyAsync(q=>q.Id == questionDTO.Id)))
+		if (questionDTO != null && !(await _questionRepository.AnyAsync(q=>q.Id == questionDTO.QuestionNumber)))
 		{
 			Question question = new Question()
 			{
@@ -32,8 +33,8 @@ public class QuestionService: IQuestionService
 				type = questionDTO.type
 
 			};
-			var entry =await _db.Questions.AddAsync(question);
-			await _db.SaveChangesAsync();
+			var entry =await _questionRepository.AddAsync(question);
+
 			return question;
 		}
 		return null;
@@ -41,13 +42,13 @@ public class QuestionService: IQuestionService
 	}
 	public async Task<Question> EditQuestion(int id,EditQuestionDTO questionDTO)
 	{
-		var question = await _db.Questions.FirstOrDefaultAsync(x => x.Id == id);
+		var question = await _questionRepository.FirstOrDefaultAsync(x => x.Id == id);
 		if(!(question == null && questionDTO==null))
 			{ 
 
 			question.data= questionDTO.data;
-			_db.Questions.Update(question);
-			await _db.SaveChangesAsync();
+			await _questionRepository.UpdateAsync(question);
+
 
 
 			return question;
@@ -60,11 +61,11 @@ public class QuestionService: IQuestionService
 	{
 
 		// there is more implemention we will disccuss about deleting reviews related to this question
-		var question = await _db.Questions.FirstOrDefaultAsync(q => q.Id == id);
+		var question = await _questionRepository.FirstOrDefaultAsync(q => q.Id == id);
 		if (question != null)
 		{
-			_db.Questions.Remove(question);
-			await _db.SaveChangesAsync();
+			await _questionRepository.DeleteAsync(question);
+
 			return true;
 		}
 		return false;
