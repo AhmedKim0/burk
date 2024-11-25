@@ -5,11 +5,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Burk.DAL.Interfaces;
+using Burk.DAL.Entity.Common;
+using Burk.DAL.Entity.Common.Interfaces;
 
 namespace Burk.DAL.Entity
 {
-    public class Review :BaseAuditableEntity, IAuditable
+    public class Review :BaseAuditableEntity, IAuditable, IHardDeletable
 	{
         [Required]
         public string CheckNo { get; set; }
@@ -23,7 +24,7 @@ namespace Burk.DAL.Entity
 
 
         public int ClientId  { get; set; }
-        public int? ReviewId { get; set; }
+
         public RecordedVisit? Recorded { get; set; } 
 
         public Client Client { get; set; }

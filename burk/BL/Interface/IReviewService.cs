@@ -10,10 +10,10 @@ public interface IReviewService
 Task<Burk.DAL.Entity.Client> GetClientByPhone(string phone);
 
 
-Task<string> AddReview(BeforeReviewDTO dto, List<ReviewDTO> reviewDTO);
+Task<string> AddReview(SubmitReviewDTO dto);
 
 
 
 
- Task<List<ReviewDTO>> GetAllReview();
+ Task<List<Review>> GetAllReview();
 }

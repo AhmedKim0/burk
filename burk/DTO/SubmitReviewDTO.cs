@@ -4,10 +4,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Burk.DTO;
 
-public class BeforeReviewDTO
-{   
+public class SubmitReviewDTO
+{
 
-	
 	[Required]
 	public string CheckNo { get; set; }
 	[Required]
@@ -15,5 +14,11 @@ public class BeforeReviewDTO
 	[Required]
 	public string PhoneNumber { get; set; }
 	public string? Email { get; set; }
+	public List<AnswerDTO> Answers { get; set; }
+
+
+
 
 }
+
+

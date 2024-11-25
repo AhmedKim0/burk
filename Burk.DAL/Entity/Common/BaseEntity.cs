@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Burk.DAL.Entity
+namespace Burk.DAL.Entity.Common
 {
     public class BaseEntity
     {

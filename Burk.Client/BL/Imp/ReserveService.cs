@@ -25,7 +25,7 @@ namespace Burk.Client.BL.Imp
         }
         public async Task<string> AddReservaiton(WatinigListDto waiting)
         {
-            var client = await  _clientRepo.FirstOrDefaultAsync(c => c.PhoneNumber == waiting.PhoneNumber);
+            var client = await  _clientRepo.FirstOrDefaultAsync(c => c.PhoneNumber == waiting.PhoneNumber,false);
             if (client == null)
             {
                 Burk.DAL.Entity.Client addClient = new()
@@ -46,7 +46,7 @@ namespace Burk.Client.BL.Imp
             else
             {
 				WaitingList waitinglist = _mapper.Map<WaitingList>(waiting);
-				client = await _clientRepo.FirstOrDefaultAsync(c => c.PhoneNumber == waiting.PhoneNumber);
+				client = await _clientRepo.FirstOrDefaultAsync(c => c.PhoneNumber == waiting.PhoneNumber, false);
 				waitinglist.ClientId = client.Id;
 				await  _waitinigRepo.AddAsync(waitinglist);
 				return "success";

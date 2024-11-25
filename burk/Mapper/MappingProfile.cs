@@ -10,7 +10,7 @@ namespace Burk.Mapper
     {
         public MappingProfile()
         {
-			CreateMap<ReviewDTO, Review>().ReverseMap();
+			CreateMap<SubmitReviewDTO, Review>().ReverseMap();
 
 		}
 } }

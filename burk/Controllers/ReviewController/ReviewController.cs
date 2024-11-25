@@ -26,9 +26,16 @@ public class ReviewController : ControllerBase
 		}
 		return BadRequest(ModelState);
 	}
-	//[HttpPost]
-	//public async Task<IActionResult> AddReview(int id, ReviewDTO DTO)
-	//{
-	//	if(Mode)
-	//}
+	[HttpPost("AddReview")]
+	public async Task<IActionResult> AddReview(SubmitReviewDTO dto)
+	{
+		if(ModelState.IsValid) {
+			return Ok(await _reviewService.AddReview(dto)); }
+		return BadRequest(ModelState);
+	}
+	[HttpGet("GetAllReview")]
+	public async Task<IActionResult> GetAllReview( )
+	{
+		return Ok(await _reviewService.GetAllReview());
+	}
 }

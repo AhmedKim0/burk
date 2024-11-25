@@ -19,7 +19,7 @@ public class QuestionService: IQuestionService
 
 	public async Task<List<Question>> GetAllQuestions()
 	{
-		return await _questionRepository.ListAllAsync();
+		return await _questionRepository.ListAllAsync(false);
 	}
 	public async Task<Question> AddQuestion(AddQuestionDTO questionDTO)
 	{
@@ -42,7 +42,7 @@ public class QuestionService: IQuestionService
 	}
 	public async Task<Question> EditQuestion(int questionumber,EditQuestionDTO questionDTO)
 	{
-		var question = await _questionRepository.FirstOrDefaultAsync(x => x.QuestionNumber == questionumber);
+		var question = await _questionRepository.FirstOrDefaultAsync(x => x.QuestionNumber == questionumber, false);
 		if(!(question == null && questionDTO==null))
 			{ 
 
@@ -61,7 +61,7 @@ public class QuestionService: IQuestionService
 	{
 
 		// there is more implemention we will disccuss about deleting reviews related to this question
-		var question = await _questionRepository.FirstOrDefaultAsync(q => q.Id == id);
+		var question = await _questionRepository.FirstOrDefaultAsync(q => q.Id == id, false);
 		if (question != null)
 		{
 			await _questionRepository.DeleteAsync(question);

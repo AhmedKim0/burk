@@ -45,7 +45,7 @@ public class ReserveService: IReserveService
 	public async Task<string> AcceptUser(int id  ,int tablenumber)
 
 	{
-		WaitingList waitingUser = await _waitngRepo.FirstOrDefaultAsync(x => x.Id == id);
+		WaitingList waitingUser = await _waitngRepo.FirstOrDefaultAsync(x => x.Id == id, false);
  
 		var client = await _clientRepo.FirstOrDefaultAsync(i=>i.PhoneNumber== waitingUser.PhoneNumber);
 		if (!(waitingUser == null && client==null))
@@ -64,8 +64,8 @@ public class ReserveService: IReserveService
 	}
 	public async Task<string> UnAcceptUser(int id)
 	{
-		//var accpeted = await _acceptRepo.FirstOrDefaultAsync(x => x.Id == id);
-		var accepted = await _waitngRepo.FirstOrDefaultAsync(c => c.Id == id);
+
+		var accepted = await _waitngRepo.FirstOrDefaultAsync(c => c.Id == id,false);
 		if (accepted != null) { 
 		accepted.IsAccepted=false;
 		accepted.TableNumber=null;
@@ -80,9 +80,9 @@ public class ReserveService: IReserveService
 	public async Task<string> ConfirmUser(int id, int tablenumber)
 
 	{
-		WaitingList waitingUser = await _waitngRepo.FirstOrDefaultAsync(x => x.Id == id);
+		WaitingList waitingUser = await _waitngRepo.FirstOrDefaultAsync(x => x.Id == id, false);
 
-		var client = await _clientRepo.FirstOrDefaultAsync(i => i.PhoneNumber == waitingUser.PhoneNumber);
+		var client = await _clientRepo.FirstOrDefaultAsync(i => i.PhoneNumber == waitingUser.PhoneNumber, false);
 		if (!(waitingUser == null && client == null))
 		{
 			waitingUser.TableNumber = tablenumber;
@@ -101,8 +101,8 @@ public class ReserveService: IReserveService
 	public async Task<string> UnConfirmUser(int id)
 	{
 		//var accpeted = await _acceptRepo.FirstOrDefaultAsync(x => x.Id == id);
-		var Confirmed = await _waitngRepo.FirstOrDefaultAsync(c => c.Id == id);
-		if (Confirmed != null)
+		var Confirmed = await _waitngRepo.FirstOrDefaultAsync(c => c.Id == id,false);
+		if (Confirmed.IsConfirmed== true)
 		{
 			Confirmed.IsAccepted = false;
 			Confirmed.TableNumber = null;
@@ -120,7 +120,7 @@ public class ReserveService: IReserveService
 
 	public async Task<string> RemoveUserWaiting(int id,bool Isleaving=false)// make if false allways
 	{
-		var user = await _waitngRepo.FirstOrDefaultAsync(w => w.Id == id);
+		var user = await _waitngRepo.FirstOrDefaultAsync(w => w.Id == id, false);
 		if (user != null) {
 		if(Isleaving )
 		{
@@ -151,7 +151,7 @@ public class ReserveService: IReserveService
 	public async Task<string> EditAccepted(int id ,EditUserDTO userDTO)
 	{
 		
-		var user = await _waitngRepo.FirstOrDefaultAsync(u=>u.Id==id);
+		var user = await _waitngRepo.FirstOrDefaultAsync(u=>u.Id==id, false);
 		if (!(user == null)) { 
 		user.AttendanceTime = userDTO.AttendanceTime;
 		user.area=userDTO.area;

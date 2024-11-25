@@ -5,11 +5,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Burk.DAL.Interfaces;
+using Burk.DAL.Entity.Common;
+using Burk.DAL.Entity.Common.Interfaces;
 
 namespace Burk.DAL.Entity
 {
-       public class Client:BaseAuditableEntity,IAuditable
+    public class Client:BaseAuditableEntity,IAuditable
     {
         [Required]
         public string PhoneNumber { get; set; }

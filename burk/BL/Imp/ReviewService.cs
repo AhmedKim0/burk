@@ -22,24 +22,31 @@ public class ReviewService: IReviewService
 	private readonly IMapper _mapper;
 
 
-	public ReviewService(IAsyncRepository<Review> reviewRepo,IMapper mapper
-		, IAsyncRepository<WaitingList> waitingListRepo, IAsyncRepository<RecordedVisit> recordedVisit)
+	public ReviewService(
+		IAsyncRepository<Review> reviewRepo,
+		IMapper mapper,
+		IAsyncRepository<WaitingList> waitingListRepo,
+		IAsyncRepository<RecordedVisit> recordedVisit,
+		IAsyncRepository<Burk.DAL.Entity.Client> clientRepo
+		)
 	{
 		_reviewRepo = reviewRepo ?? throw new ArgumentNullException(nameof(reviewRepo));
 		_mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
 		_waitingListRepo = waitingListRepo ?? throw new ArgumentNullException(nameof(waitingListRepo));
 		_recordedVisitRepo = recordedVisit ?? throw new ArgumentNullException(nameof(recordedVisit));
+		_clientRepo= clientRepo?? throw new ArgumentNullException(nameof(clientRepo));
+		
 	}
 	public async Task<Burk.DAL.Entity.Client> GetClientByPhone(string phone)
 	{
-		var client = await _clientRepo.FirstOrDefaultAsync(c => c.PhoneNumber == phone);
+		Client client = await _clientRepo.FirstOrDefaultAsync(c => c.PhoneNumber == phone,false);
 		if (client != null)
 			return client;
 		else return new Burk.DAL.Entity.Client();
 
 	}
-	public async Task<string> AddReview(BeforeReviewDTO dto, List<ReviewDTO> reviewDTO)
-	{ Client client = await _clientRepo.FirstOrDefaultAsync(client => client.PhoneNumber == dto.PhoneNumber);
+	public async Task<string> AddReview(SubmitReviewDTO dto)
+	{ Client client = await _clientRepo.FirstOrDefaultAsync(client => client.PhoneNumber == dto.PhoneNumber,false);
 		if (client==null)
 		{
 
@@ -63,8 +70,8 @@ public class ReviewService: IReviewService
 
 
 
-		var visit = await _waitingListRepo.LastOrDefaultAsync(c => c.ClientId ==client.Id&&c.IsConfirmed==true);
-		foreach (var item in reviewDTO)
+		var visit = await _waitingListRepo.LastOrDefaultAsync(c => c.ClientId ==client.Id&&c.IsConfirmed==true,false);
+		foreach (var item in dto.Answers)
 		{
 			if (dto.CheckNo == null)
 			{
@@ -78,6 +85,7 @@ public class ReviewService: IReviewService
 				rate = item.rate,
 				AnswerType = item.AnswerType,
 				QuestionNumber = item.QuestionNumber,
+				ClientId=client.Id,
 
 			};
 			await _reviewRepo.AddAsync(review, false);
@@ -103,13 +111,18 @@ public class ReviewService: IReviewService
 		return "done";
 
 	}
-	public async Task<List<ReviewDTO>> GetAllReview()
+	public async Task<List<Review>> GetAllReview()
 	{
+		//List<AnswerDTO> list = new List<AnswerDTO>();
 		List<Review> reviews = await _reviewRepo.ListAllAsync();
-		reviews.OrderByDescending(x=>x.ClientId).ThenBy(c=>c.CreatedBy)
-		.ThenBy(n=>n.QuestionNumber);
-		List<ReviewDTO> DTO=_mapper.Map<List<ReviewDTO>>(reviews);
-		return DTO;
+		//reviews.OrderByDescending(x=>x.ClientId).ThenBy(c=>c.CreatedBy)
+		//.ThenBy(n=>n.QuestionNumber);
+		//foreach (var review in reviews)
+		//{
+
+		//}
+		
+		return reviews;
 							
 
 	}

@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Burk.DAL.Context;
-using Burk.DAL.Entity;
+using Burk.DAL.Entity.Common;
 using Burk.DAL.Repository.Helper;
 using Burk.DAL.Repository.Interface;
 using Microsoft.EntityFrameworkCore;

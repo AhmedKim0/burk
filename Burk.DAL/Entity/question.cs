@@ -1,5 +1,5 @@
-﻿using Burk.DAL.Interfaces;
-
+﻿using Burk.DAL.Entity.Common;
+using Burk.DAL.Entity.Common.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Burk.DAL.Entity;
-public class Question : BaseAuditableEntity, IAuditable
+public class Question : BaseAuditableEntity, IAuditable, IHardDeletable
 {
 
 	public int QuestionNumber {  get; set; }

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Burk.DAL.Interfaces
+namespace Burk.DAL.Entity.Common
 {
-    internal interface IAuditable
+    public class BaseAuditableEntity : BaseEntity
     {
         public DateTime CreatedAtUtc { get; set; }
         public DateTime? UpdatedAtUtc { get; set; }
