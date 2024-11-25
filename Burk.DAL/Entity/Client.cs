@@ -17,9 +17,9 @@ namespace Burk.DAL.Entity
         public string Name { get; set; }
         public string? Email { get; set; }
       
-        public ICollection<Review> Reviews { get; set; } //Nav property one to many
-        public List<WaitingList> WaitingList { get; set; }//Nav property one to many
-        public List<TempUser> TempUsers { get; set; }
+        public ICollection<Review>? Reviews { get; set; } //Nav property one to many
+        public List<WaitingList>? WaitingList { get; set; }//Nav property one to many
+        public List<RecordedVisit>? RecordedVisits { get; set; }
 
 
     }

@@ -17,7 +17,7 @@ namespace Burk.DAL.Context
 
         public DbSet<Client> Clients { get; set; }
         public DbSet<Review> Reviews { get; set; }
-        public DbSet<TempUser> TempUsers { get; set; }
+        public DbSet<RecordedVisit> RecordedVisits { get; set; }
         public DbSet<WaitingList> WaitingLists { get; set; }
         public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<Question> Questions { get; set; }

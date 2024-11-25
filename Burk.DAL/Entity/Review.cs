@@ -23,6 +23,8 @@ namespace Burk.DAL.Entity
 
 
         public int ClientId  { get; set; }
+        public int? ReviewId { get; set; }
+        public RecordedVisit? Recorded { get; set; } 
 
         public Client Client { get; set; }
 

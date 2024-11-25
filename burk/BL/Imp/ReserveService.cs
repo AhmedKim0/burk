@@ -15,12 +15,12 @@ namespace Burk.BL.Imp;
 public class ReserveService: IReserveService
 {
 	private readonly IAsyncRepository<WaitingList> _waitngRepo;
-	private readonly IAsyncRepository<TempUser> _tempRepo;
+	private readonly IAsyncRepository<RecordedVisit> _tempRepo;
 	private readonly IAsyncRepository<Burk.DAL.Entity.Client> _clientRepo;
 	private readonly IMapper _mapper;
 	//private readonly BurkDbContext _burkDbContext;
 
-	public ReserveService(IAsyncRepository<WaitingList> waitngRepo, IAsyncRepository<TempUser> tempRepo, IMapper mapper
+	public ReserveService(IAsyncRepository<WaitingList> waitngRepo, IAsyncRepository<RecordedVisit> tempRepo, IMapper mapper
 		, IAsyncRepository<Burk.DAL.Entity.Client> clientRepo)/*, BurkDbContext burkDbContext)*/
 	{
 		_waitngRepo = waitngRepo ?? throw new ArgumentNullException(nameof(waitngRepo));
@@ -53,18 +53,7 @@ public class ReserveService: IReserveService
 			waitingUser.TableNumber=tablenumber;
 			waitingUser.IsAccepted = true;
 
-			//AcceptedUser user = new AcceptedUser
-		//{
-		//	ClientId=client.Id,
-		//	TableNumber=tablenumber,
-		//	Visitors=waitingUser.Visitors,
-		//	WaitingListId=id,
-		//		ReservationTime=waitingUser.ReservationTime,
-		//		AttendanceTime=waitingUser.AttendanceTime,
-		//		area=waitingUser.area,
-		//		Smoking=waitingUser.Smoking,
 
-		//	};
 		
 			await _waitngRepo.UpdateAsync(waitingUser);
 
@@ -80,19 +69,7 @@ public class ReserveService: IReserveService
 		if (accepted != null) { 
 		accepted.IsAccepted=false;
 		accepted.TableNumber=null;
-		//if (!(accpeted == null && client == null)) { 
-		//	var ToWaiting = new WaitingList()
-		//{
-		//	ClientName= client.Name,
-		//	PhoneNumber=client.PhoneNumber,
-		//	Email=client.Email,
-		//	Visitors=accpeted.Visitors,
-		//	ReservationTime = accpeted.ReservationTime,
-		//	AttendanceTime= accpeted.AttendanceTime,
-		//	area=accpeted.area,
-		//	Smoking = accpeted.Smoking,
 
-		//};
 		await _waitngRepo.UpdateAsync(accepted); 
 			return "done"; }
 			
@@ -100,13 +77,54 @@ public class ReserveService: IReserveService
 	
 
 	}
-	 public async Task<string> RemoveUserWaiting(int id,bool Isleaving)
+	public async Task<string> ConfirmUser(int id, int tablenumber)
+
+	{
+		WaitingList waitingUser = await _waitngRepo.FirstOrDefaultAsync(x => x.Id == id);
+
+		var client = await _clientRepo.FirstOrDefaultAsync(i => i.PhoneNumber == waitingUser.PhoneNumber);
+		if (!(waitingUser == null && client == null))
+		{
+			waitingUser.TableNumber = tablenumber;
+			waitingUser.IsAccepted = true;
+			waitingUser.IsConfirmed=true;
+
+
+
+			await _waitngRepo.UpdateAsync(waitingUser);
+
+			return "done";
+		}
+		return "client is not registed or client reservation not found";
+
+	}
+	public async Task<string> UnConfirmUser(int id)
+	{
+		//var accpeted = await _acceptRepo.FirstOrDefaultAsync(x => x.Id == id);
+		var Confirmed = await _waitngRepo.FirstOrDefaultAsync(c => c.Id == id);
+		if (Confirmed != null)
+		{
+			Confirmed.IsAccepted = false;
+			Confirmed.TableNumber = null;
+			Confirmed.IsConfirmed = false;
+
+			await _waitngRepo.UpdateAsync(Confirmed);
+			return "done";
+		}
+
+		return "not found client or Confirmed user";
+
+
+	}
+
+
+	public async Task<string> RemoveUserWaiting(int id,bool Isleaving=false)// make if false allways
 	{
 		var user = await _waitngRepo.FirstOrDefaultAsync(w => w.Id == id);
 		if (user != null) {
 		if(Isleaving )
 		{
-			TempUser temp = new TempUser()
+			RecordedVisit temp = new RecordedVisit()
 			{
 				AttendanceTime = user.AttendanceTime,
 				ReservationTime = user.ReservationTime,
@@ -129,13 +147,7 @@ public class ReserveService: IReserveService
 		}
 		return "failed";
 	}
-	//public async Task RemoveAccepted(int id)
-	//{
-	//	var user = await _waitngRepo.FirstOrDefaultAsync(w => w.Id == id);
-		
-	//	await _acceptRepo.DeleteAsync(user);
 
-	//}
 	public async Task<string> EditAccepted(int id ,EditUserDTO userDTO)
 	{
 		

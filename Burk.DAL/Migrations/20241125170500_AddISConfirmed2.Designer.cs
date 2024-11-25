@@ -4,6 +4,7 @@ using Burk.DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Burk.DAL.Migrations
 {
     [DbContext(typeof(BurkDbContext))]
-    partial class BurkDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241125170500_AddISConfirmed2")]
+    partial class AddISConfirmed2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,7 +61,7 @@ namespace Burk.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Clients", (string)null);
+                    b.ToTable("Clients");
                 });
 
             modelBuilder.Entity("Burk.DAL.Entity.Question", b =>
@@ -96,7 +99,7 @@ namespace Burk.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Questions", (string)null);
+                    b.ToTable("Questions");
                 });
 
             modelBuilder.Entity("Burk.DAL.Entity.RecordedVisit", b =>
@@ -147,7 +150,7 @@ namespace Burk.DAL.Migrations
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("RecordedVisit", (string)null);
+                    b.ToTable("RecordedVisit");
                 });
 
             modelBuilder.Entity("Burk.DAL.Entity.Review", b =>
@@ -212,7 +215,7 @@ namespace Burk.DAL.Migrations
 
                     b.HasIndex("RecordedId");
 
-                    b.ToTable("Reviews", (string)null);
+                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("Burk.DAL.Entity.WaitingList", b =>
@@ -280,7 +283,7 @@ namespace Burk.DAL.Migrations
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("WaitingLists", (string)null);
+                    b.ToTable("WaitingLists");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

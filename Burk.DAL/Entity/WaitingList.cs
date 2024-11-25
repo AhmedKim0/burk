@@ -9,7 +9,6 @@ namespace Burk.DAL.Entity
 {
     public class WaitingList : BaseAuditableEntity, IAuditable
     {
-        public int ClientId { get; set; }
 
 		public string ClientName { get; set; }
         public string PhoneNumber { get; set; }
@@ -22,10 +21,13 @@ namespace Burk.DAL.Entity
         public DateTime ReservationTime { get; set; } = DateTime.Now;
         public DateTime AttendanceTime { get; set; }
         public bool IsAccepted { get; set; }
+        public bool IsConfirmed {  get; set; }
 
         public int? area { get; set; }
         public bool? Smoking { get; set; }
-        public Client  client { get; set; }
+		public int ClientId { get; set; }
+
+		public Client  client { get; set; }
 
 
 

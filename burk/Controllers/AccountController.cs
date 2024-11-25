@@ -12,6 +12,7 @@ using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.AspNetCore.Identity.Data;
 
 namespace Burk.Controllers
 {
@@ -144,6 +145,52 @@ namespace Burk.Controllers
 			//var usersWithRoles = await _userService.GetAllUsersWithRolesAsync();
 			return Ok(userWithRoles);
 		}
+		[HttpPost("ResetPassword")]
+		public async Task<IActionResult> ResetPassword( ResetPasswordDTO model)
+		{
+			if (!ModelState.IsValid)
+			{
+				return BadRequest(ModelState);
+			}
 
+			var user = await _userManager.FindByIdAsync(model.UserId);
+			if (user == null)
+			{
+				return NotFound(new { message = "User not found" });
+			}
+
+			// Generate a password reset token
+			var resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+			// Reset the password using the token
+			var result = await _userManager.ResetPasswordAsync(user, resetToken, model.NewPassword);
+
+			if (result.Succeeded)
+			{
+				return Ok(new { message = "Password reset successfully" });
+			}
+
+			return BadRequest(result.Errors.Select(e => e.Description));
+		}
+		[HttpDelete("DeleteUser/{userId}")]
+		public async Task<IActionResult> DeleteUser(string userId)
+		{
+			var user = await _userManager.FindByIdAsync(userId);
+			if (user == null)
+			{
+				return NotFound(new { message = "User not found" });
+			}
+
+			var result = await _userManager.DeleteAsync(user);
+
+			if (result.Succeeded)
+			{
+				return Ok(new { message = "User deleted successfully" });
+			}
+
+			return BadRequest(result.Errors.Select(e => e.Description));
+		}
 	}
+
 }
+
