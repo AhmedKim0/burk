@@ -8,10 +8,11 @@ using Burk.DAL.Entity;
 using Burk.Client.BL.Interfaces;
 using Burk.Client.BL.Imp;
 using Burk.Client.Mapper;
+using Burk.DAL.Context.contextIdentity;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+/*Add services to the container*/
 builder.Services.AddCors(options =>
 {
 	options.AddPolicy("AllowOrigin", builder =>
@@ -21,7 +22,8 @@ builder.Services.AddCors(options =>
 			   .AllowAnyHeader();
 	});
 });
-
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddScoped<IUserContextService, UserContextService>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

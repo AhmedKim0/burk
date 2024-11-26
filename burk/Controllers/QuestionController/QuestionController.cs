@@ -2,6 +2,7 @@
 using Burk.DAL.Entity;
 using Burk.DTO;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,6 +24,9 @@ public class QuestionController : ControllerBase
 		return Ok(questions);
 
 	}
+	[Authorize(Roles = "Admin")]
+	//[Authorize]
+
 	[HttpPost("AddQuestion")]
 	public async Task<IActionResult> AddQuestion(AddQuestionDTO addQuestionDTO)
 	{

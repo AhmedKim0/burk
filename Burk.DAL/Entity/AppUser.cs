@@ -9,5 +9,6 @@ namespace Burk.DAL.Entity
 {
     public class AppUser:IdentityUser
     {
-    }
+		public bool IsDeleted { get; set; }
+	}
 }

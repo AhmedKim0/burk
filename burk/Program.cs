@@ -14,6 +14,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Burk.BL.Interface;
 using Burk.BL.Imp;
+using Burk.DAL.Context.contextIdentity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,9 +39,10 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<BurkDbContext>(options => options
 .UseSqlServer(builder.Configuration.GetConnectionString("DefultConnetion")));
 
-builder.Services.AddIdentity<AppUser,IdentityRole>().AddEntityFrameworkStores<BurkDbContext>();
+builder.Services.AddIdentity<AppUser,IdentityRole>().AddEntityFrameworkStores<BurkDbContext>().AddDefaultTokenProviders(); ;
 
-
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddScoped<IUserContextService, UserContextService>();
 builder.Services.AddScoped<IAsyncRepository<WaitingList>, Repository<WaitingList>>();
 builder.Services.AddScoped<IAsyncRepository<Client>, Repository<Client>>();
 builder.Services.AddScoped<IAsyncRepository<RecordedVisit>, Repository<RecordedVisit>>();
@@ -85,8 +87,8 @@ builder.Services.AddSwaggerGen(o =>
 		Description = "adasdsad",
 		Contact = new OpenApiContact()
 		{
-			Name = "Ahmedkimo",
-			Email = "a.medhat.kimo@gmail.com",
+			Name = "Burk",
+			Email = "Burk",
 			Url = new Uri("https://mydomain.com")
 		}
 	});

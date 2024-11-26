@@ -43,19 +43,21 @@ namespace Burk.Controllers
 				};
 
 				IdentityResult result = await _userManager.CreateAsync(appUser, user.password);
-
+				
 				if (result.Succeeded)
-				{
-					switch (user.role) 
+				{ var getuser=await _userManager.FindByNameAsync(appUser.UserName);
+					if (user != null )
+
+						switch (user.role) 
 						{ 
 						case 1:
-					await _userManager.AddToRoleAsync(appUser, "Admin");
+					await _userManager.AddToRoleAsync(getuser, "Admin");
 							break;
 						case 2:
-							await _userManager.AddToRoleAsync(appUser, "Reserver");
+							await _userManager.AddToRoleAsync(getuser, "Reserver");
 							break;
 						case 3:
-							await _userManager.AddToRoleAsync(appUser, "Waiter");
+							await _userManager.AddToRoleAsync(getuser, "Waiter");
 							break;
 
 					}
