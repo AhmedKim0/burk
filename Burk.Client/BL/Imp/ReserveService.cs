@@ -36,6 +36,8 @@ namespace Burk.Client.BL.Imp
                     
 
                 };
+
+
 				WaitingList waitinglist = _mapper.Map<WaitingList>(waiting);
 
 				client= await _clientRepo.AddAsync(addClient);

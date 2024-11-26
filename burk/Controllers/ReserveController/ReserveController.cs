@@ -38,8 +38,9 @@ public class ReserveController : ControllerBase
     {
 
        string state= await _reserveService.AcceptUser(id, tablenumber);
-
-        if (state == "done")
+		if (!ModelState.IsValid)
+			return BadRequest(state);
+		if (state == "done")
          return Ok("Accepted");
         return BadRequest(state);
 
@@ -57,10 +58,11 @@ public class ReserveController : ControllerBase
 	{
 
 		string state = await _reserveService.ConfirmUser(id, tablenumber);
-
+        if(!ModelState.IsValid)
+            return BadRequest(state);
 		if (state == "done")
 			return Ok("Accepted");
-		return BadRequest(state);
+		return NotFound(state);
 
 	}
 	[HttpPost("UnConfirmUser")]
@@ -79,7 +81,7 @@ public class ReserveController : ControllerBase
             return Ok("Accepted");
         return BadRequest(state);
     }
-    [HttpDelete("RemoveUser")]
+    [HttpDelete("RemoveReservation")]
     public async Task<IActionResult> RemoveUserWaiting(int id,bool IsLeaving)
         // true if the customer came and false if the use was fake or didnot come
     {

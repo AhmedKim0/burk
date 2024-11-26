@@ -81,7 +81,7 @@ public class ReserveService: IReserveService
 
 	{
 		WaitingList waitingUser = await _waitngRepo.FirstOrDefaultAsync(x => x.Id == id, false);
-
+		if (waitingUser == null) { return "invalid waitinglist";}
 		var client = await _clientRepo.FirstOrDefaultAsync(i => i.PhoneNumber == waitingUser.PhoneNumber, false);
 		if (!(waitingUser == null && client == null))
 		{
