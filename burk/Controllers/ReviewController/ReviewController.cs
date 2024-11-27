@@ -1,6 +1,7 @@
 ﻿using Burk.BL.Interface;
 using Burk.DTO;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -16,6 +17,11 @@ public class ReviewController : ControllerBase
 	{
 		_reviewService = reviewService ?? throw new ArgumentNullException(nameof(reviewService));
 	}
+
+
+
+
+	[Authorize(Roles = "Admin,Waiter")]
 	[HttpGet("GetClientByPhone")]
 	public async Task<IActionResult> GetClientByPhone(string phoneNumber)
 	{
@@ -26,6 +32,11 @@ public class ReviewController : ControllerBase
 		}
 		return BadRequest(ModelState);
 	}
+
+
+
+
+	[Authorize(Roles = "Admin,Waiter")]
 	[HttpPost("AddReview")]
 	public async Task<IActionResult> AddReview(SubmitReviewDTO dto)
 	{
@@ -33,6 +44,13 @@ public class ReviewController : ControllerBase
 			return Ok(await _reviewService.AddReview(dto)); }
 		return BadRequest(ModelState);
 	}
+
+
+
+
+
+
+	[Authorize(Roles = "Admin")]
 	[HttpGet("GetAllReview")]
 	public async Task<IActionResult> GetAllReview( )
 	{

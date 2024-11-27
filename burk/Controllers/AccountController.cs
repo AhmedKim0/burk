@@ -30,7 +30,10 @@ namespace Burk.Controllers
 		private readonly UserManager<AppUser> _userManager;
 		private readonly IConfiguration configuration;
 		//[Authorize]
-		//[Authorize(Roles = "Admin")]
+		
+		
+		
+		[Authorize(Roles = "Admin")]
 		[HttpPost("Register")]
 		public async Task<IActionResult> RegisterNewUser(RegistrationDTO user)
 		{
@@ -128,6 +131,9 @@ namespace Burk.Controllers
 			return BadRequest(ModelState);
 		}
 		
+		
+		
+		[Authorize(Roles = "Admin")]
 		[HttpGet("GetUsersWithRoles")]
 		public async Task<IActionResult> GetUsersWithRoles()
 		{
@@ -147,6 +153,9 @@ namespace Burk.Controllers
 			//var usersWithRoles = await _userService.GetAllUsersWithRolesAsync();
 			return Ok(userWithRoles);
 		}
+		
+		
+		[Authorize(Roles = "Admin")]
 		[HttpPost("ResetPassword")]
 		public async Task<IActionResult> ResetPassword( ResetPasswordDTO model)
 		{
@@ -174,7 +183,10 @@ namespace Burk.Controllers
 
 			return BadRequest(result.Errors.Select(e => e.Description));
 		}
+		
+		
 		[HttpDelete("DeleteUser/{userId}")]
+		[Authorize(Roles = "Admin")]
 		public async Task<IActionResult> DeleteUser(string userId)
 		{
 			var user = await _userManager.FindByIdAsync(userId);

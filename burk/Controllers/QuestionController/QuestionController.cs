@@ -17,6 +17,7 @@ public class QuestionController : ControllerBase
 	{
 		this.questionService = questionService ?? throw new ArgumentNullException(nameof(questionService));
 	}
+	[Authorize(Roles = "Admin")]
 	[HttpGet("GetAllQuestion")]
 	public async Task<IActionResult> GetAllQuestion()
 	{
@@ -25,8 +26,6 @@ public class QuestionController : ControllerBase
 
 	}
 	[Authorize(Roles = "Admin")]
-	//[Authorize]
-
 	[HttpPost("AddQuestion")]
 	public async Task<IActionResult> AddQuestion(AddQuestionDTO addQuestionDTO)
 	{
@@ -36,6 +35,7 @@ public class QuestionController : ControllerBase
 		}
 		return BadRequest();
 	}
+	[Authorize(Roles = "Admin")]
 	[HttpPut("EditQuestion")]
 	public async Task<IActionResult> EditQuestion(int id,EditQuestionDTO editQuestionDTO)
 	{
@@ -47,8 +47,7 @@ public class QuestionController : ControllerBase
 		}
 		return BadRequest();
 	}
-
-
+	[Authorize(Roles = "Admin")]
 	[HttpDelete("RemoveQuestion")]
 	public async Task<IActionResult> RemoveQuestion(int id)
 	{
