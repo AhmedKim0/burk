@@ -47,6 +47,14 @@ namespace Burk.Client.BL.Imp
 			}
             else
             {
+                if (client.Name != waiting.ClientName)
+                {
+                    client.Name = waiting.ClientName;
+                    await _clientRepo.UpdateAsync(client);
+                }
+
+
+
 				WaitingList waitinglist = _mapper.Map<WaitingList>(waiting);
 				client = await _clientRepo.FirstOrDefaultAsync(c => c.PhoneNumber == waiting.PhoneNumber, false);
 				waitinglist.ClientId = client.Id;

@@ -22,7 +22,7 @@ namespace Burk.DAL.Entity
         public DateTime ReservationTime { get; set; } = DateTime.Now;
         public DateTime AttendanceTime { get; set; }
         public bool IsAccepted { get; set; }
-        public bool IsConfirmed {  get; set; }
+        public int IsConfirmed {  get; set; } //0 for notconfirmed 1 confirmed 3canceled
 
         public int? area { get; set; }
         public bool? Smoking { get; set; }

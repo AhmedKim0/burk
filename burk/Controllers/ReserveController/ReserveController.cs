@@ -33,26 +33,26 @@ public class ReserveController : ControllerBase
 
 
 
-	[HttpPost("AcceptUser")]
-    public async Task<IActionResult> AcceptUser(int id, int tablenumber)
-    {
+	//[HttpPost("AcceptUser")]
+ //   public async Task<IActionResult> AcceptUser(int id, int tablenumber)
+ //   {
 
-       string state= await _reserveService.AcceptUser(id, tablenumber);
-		if (!ModelState.IsValid)
-			return BadRequest(state);
-		if (state == "done")
-         return Ok("Accepted");
-        return BadRequest(state);
+ //      string state= await _reserveService.AcceptUser(id, tablenumber);
+	//	if (!ModelState.IsValid)
+	//		return BadRequest(state);
+	//	if (state == "done")
+ //        return Ok("Accepted");
+ //       return BadRequest(state);
 
-    }
-    [HttpPost("UnAcceptUser")]
-    public async Task<IActionResult> UnAcceptUser(int id)
-    {
-        string state = await _reserveService.UnAcceptUser(id);
-        if (state == "done")
-            return Ok("Accepted");
-        return BadRequest(state);
-    }
+ //   }
+ //   [HttpPost("UnAcceptUser")]
+ //   public async Task<IActionResult> UnAcceptUser(int id)
+ //   {
+ //       string state = await _reserveService.UnAcceptUser(id);
+ //       if (state == "done")
+ //           return Ok("Accepted");
+ //       return BadRequest(state);
+ //   }
 	[HttpPost("ConfirmUser")]
 	public async Task<IActionResult> ConfirmUser(int id, int tablenumber)
 	{

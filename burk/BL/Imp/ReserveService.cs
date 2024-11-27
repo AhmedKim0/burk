@@ -32,7 +32,7 @@ public class ReserveService: IReserveService
 
 	public async Task<List<WaitingList>> GetWaitingListAsync()
 		{
-		return await _waitngRepo.ListAsync(x=>x.IsAccepted==false,false);
+		return await _waitngRepo.ListAllAsync(false);
 
 	}
 	public async Task<List<WaitingList>> GetAcceptedUserAsync()
@@ -87,7 +87,7 @@ public class ReserveService: IReserveService
 		{
 			waitingUser.TableNumber = tablenumber;
 			waitingUser.IsAccepted = true;
-			waitingUser.IsConfirmed=true;
+			waitingUser.IsConfirmed=2;
 
 
 
@@ -102,11 +102,11 @@ public class ReserveService: IReserveService
 	{
 		//var accpeted = await _acceptRepo.FirstOrDefaultAsync(x => x.Id == id);
 		var Confirmed = await _waitngRepo.FirstOrDefaultAsync(c => c.Id == id,false);
-		if (Confirmed.IsConfirmed== true)
+		if (Confirmed.IsConfirmed== 2)
 		{
 			Confirmed.IsAccepted = false;
 			Confirmed.TableNumber = null;
-			Confirmed.IsConfirmed = false;
+			Confirmed.IsConfirmed = 1;
 
 			await _waitngRepo.UpdateAsync(Confirmed);
 			return "done";

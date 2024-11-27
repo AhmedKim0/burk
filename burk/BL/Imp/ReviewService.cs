@@ -70,7 +70,7 @@ public class ReviewService: IReviewService
 
 
 
-		var visit = await _waitingListRepo.LastOrDefaultAsync(c => c.ClientId ==client.Id&&c.IsConfirmed==true,false);
+		var visit = await _waitingListRepo.LastOrDefaultAsync(c => c.ClientId ==client.Id&&c.IsConfirmed==2,false);
 		foreach (var item in dto.Answers)
 		{
 			if (dto.CheckNo == null)
@@ -104,8 +104,10 @@ public class ReviewService: IReviewService
 			ClientId= visit.ClientId,
 
 		};
+		
 		await _recordedVisitRepo.AddAsync(recordvisit);
-			}
+		await _waitingListRepo.DeleteAsync(visit);
+		}
 		await _reviewRepo.SaveChangesAsync();
 		
 		return "done";
