@@ -12,7 +12,7 @@ public interface IReserveService
 	Task<string> ConfirmUser(int id, int tablenumber);
 	Task<string> UnConfirmUser(int id);
 
-	Task<string> RemoveUserWaiting(int id, bool Isleaving);
+	Task<string> CancelUserWaiting(int id, bool Isleaving);
 
 	Task<string> EditAccepted(int id, EditUserDTO userDTO);
 }

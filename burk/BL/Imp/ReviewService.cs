@@ -2,6 +2,7 @@
 
 using Burk.BL.Interface;
 using Burk.DAL.Entity;
+using Burk.DAL.Entity.Enums;
 using Burk.DAL.Repository.Interface;
 using Burk.DTO;
 
@@ -70,7 +71,7 @@ public class ReviewService: IReviewService
 
 
 
-		var visit = await _waitingListRepo.LastOrDefaultAsync(c => c.ClientId ==client.Id&&c.IsConfirmed==2,false);
+		var visit = await _waitingListRepo.LastOrDefaultAsync(c => c.ClientId ==client.Id&&c.IsConfirmed== ClientState.Confirmed, false);
 		foreach (var item in dto.Answers)
 		{
 			if (dto.CheckNo == null)

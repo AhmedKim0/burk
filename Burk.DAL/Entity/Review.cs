@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Burk.DAL.Entity.Common;
 using Burk.DAL.Entity.Common.Interfaces;
+using Burk.DAL.Entity.Enums;
 
 namespace Burk.DAL.Entity
 {
@@ -15,7 +16,7 @@ namespace Burk.DAL.Entity
         [Required]
         public string CheckNo { get; set; }
         public int QuestionNumber { get; set; }
-		public int AnswerType { get; set; }
+		public QuestionType AnswerType { get; set; }
 		public int? rate {  get; set; }
         public string? comment {  get; set; }
   

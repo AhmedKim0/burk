@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Burk.DAL.Entity.Common;
 using Burk.DAL.Entity.Common.Interfaces;
+using Burk.DAL.Entity.Enums;
 
 namespace Burk.DAL.Entity
 {
@@ -22,7 +23,7 @@ namespace Burk.DAL.Entity
         public DateTime ReservationTime { get; set; } = DateTime.Now;
         public DateTime AttendanceTime { get; set; }
         public bool IsAccepted { get; set; }
-        public int IsConfirmed {  get; set; } //0 for notconfirmed 1 confirmed 3canceled
+        public ClientState IsConfirmed {  get; set; } //0 for notconfirmed 1 confirmed 3canceled
 
         public int? area { get; set; }
         public bool? Smoking { get; set; }

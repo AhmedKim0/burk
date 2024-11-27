@@ -58,7 +58,7 @@ namespace Burk.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Clients");
+                    b.ToTable("Clients", (string)null);
                 });
 
             modelBuilder.Entity("Burk.DAL.Entity.Question", b =>
@@ -96,7 +96,7 @@ namespace Burk.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Questions");
+                    b.ToTable("Questions", (string)null);
                 });
 
             modelBuilder.Entity("Burk.DAL.Entity.RecordedVisit", b =>
@@ -147,7 +147,7 @@ namespace Burk.DAL.Migrations
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("RecordedVisit");
+                    b.ToTable("RecordedVisit", (string)null);
                 });
 
             modelBuilder.Entity("Burk.DAL.Entity.Review", b =>
@@ -209,7 +209,7 @@ namespace Burk.DAL.Migrations
 
                     b.HasIndex("RecordedId");
 
-                    b.ToTable("Reviews");
+                    b.ToTable("Reviews", (string)null);
                 });
 
             modelBuilder.Entity("Burk.DAL.Entity.WaitingList", b =>
@@ -277,7 +277,7 @@ namespace Burk.DAL.Migrations
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("WaitingLists");
+                    b.ToTable("WaitingLists", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

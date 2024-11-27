@@ -3,6 +3,7 @@
 using Burk.BL.Interface;
 using Burk.DAL.Context;
 using Burk.DAL.Entity;
+using Burk.DAL.Entity.Enums;
 using Burk.DAL.Repository.Interface;
 using Burk.DTO;
 
@@ -87,7 +88,7 @@ public class ReserveService: IReserveService
 		{
 			waitingUser.TableNumber = tablenumber;
 			waitingUser.IsAccepted = true;
-			waitingUser.IsConfirmed=2;
+			waitingUser.IsConfirmed= ClientState.Confirmed;
 
 
 
@@ -102,11 +103,11 @@ public class ReserveService: IReserveService
 	{
 		//var accpeted = await _acceptRepo.FirstOrDefaultAsync(x => x.Id == id);
 		var Confirmed = await _waitngRepo.FirstOrDefaultAsync(c => c.Id == id,false);
-		if (Confirmed.IsConfirmed== 2)
+		if (Confirmed.IsConfirmed== ClientState.Confirmed)
 		{
 			Confirmed.IsAccepted = false;
 			Confirmed.TableNumber = null;
-			Confirmed.IsConfirmed = 1;
+			Confirmed.IsConfirmed = 0;
 
 			await _waitngRepo.UpdateAsync(Confirmed);
 			return "done";
@@ -118,7 +119,7 @@ public class ReserveService: IReserveService
 	}
 
 
-	public async Task<string> RemoveUserWaiting(int id,bool Isleaving=false)// make if false allways
+	public async Task<string> CancelUserWaiting(int id,bool Isleaving=false)// make if false allways
 	{
 		var user = await _waitngRepo.FirstOrDefaultAsync(w => w.Id == id, false);
 		if (user != null) {
@@ -142,7 +143,8 @@ public class ReserveService: IReserveService
 			await _waitngRepo.DeleteAsync(user);
 				return "done";
 		}
-		await _waitngRepo.DeleteAsync(user);
+		user.IsConfirmed= ClientState.Canceled;
+		await _waitngRepo.UpdateAsync(user);
 			return "done";
 		}
 		return "failed";
