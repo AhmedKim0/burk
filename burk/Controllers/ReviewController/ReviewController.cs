@@ -34,8 +34,11 @@ public class ReviewController : ControllerBase
 		return BadRequest(ModelState);
 	}
 	[HttpGet("GetAllReview")]
-	public async Task<IActionResult> GetAllReview( )
+	public async Task<IActionResult> GetAllReview()
 	{
-		return Ok(await _reviewService.GetAllReview());
+		var result =await _reviewService.GetAllReview();
+			if (result != null) { 
+		return Ok(result); }
+			return BadRequest(ModelState);
 	}
 }

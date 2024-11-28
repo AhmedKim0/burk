@@ -14,7 +14,7 @@ public class SubmitReviewDTO
 	[Required]
 	public string PhoneNumber { get; set; }
 	public string? Email { get; set; }
-	public List<AnswerDTO> Answers { get; set; }
+	public List<AnswerDTO>? Answers { get; set; }
 
 
 

@@ -8,6 +8,7 @@ using Burk.DTO;
 
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
+using System.Collections.Generic;
 using System.Numerics;
 using System.Web.Http.ModelBinding;
 
@@ -50,13 +51,14 @@ public class ReviewService: IReviewService
 	{ Client client = await _clientRepo.FirstOrDefaultAsync(client => client.PhoneNumber == dto.PhoneNumber,false);
 		if (client==null)
 		{
+			var addClient = new Client();
 
-			client.PhoneNumber = dto.PhoneNumber;
-			client.Name = dto.ClientName;
-			client.Email = dto.Email;
+			addClient.PhoneNumber = dto.PhoneNumber;
+			addClient.Name = dto.ClientName;
+			addClient.Email = dto.Email;
 
 
-			client = await _clientRepo.AddAsync(client);
+			client = await _clientRepo.AddAsync(addClient);
 		}
 		if (client.Name != dto.ClientName)
 		{
@@ -114,24 +116,70 @@ public class ReviewService: IReviewService
 		return "done";
 
 	}
-	public async Task<List<Review>> GetAllReview()
+	public async Task<List<GetAllReviewsDTO>> GetAllReview()
 	{
-		//List<AnswerDTO> list = new List<AnswerDTO>();
-		List<Review> reviews = await _reviewRepo.ListAllAsync();
-		//reviews.OrderByDescending(x=>x.ClientId).ThenBy(c=>c.CreatedBy)
-		//.ThenBy(n=>n.QuestionNumber);
-		//foreach (var review in reviews)
-		//{
+		var all= new List < GetAllReviewsDTO >();
+		List <Client> clients = await _clientRepo.ListAllAsync(false);
 
-		//}
-		
-		return reviews;
-							
+		foreach (Client client in clients)
+		{
+					var dto = new GetAllReviewsDTO
+						{
+							ClientName = client.Name,
+							PhoneNumber = client.PhoneNumber,
+							Email = client.Email,
+							checkDTos = new List<CheckDTo>()  // Initialize the checkDTos list here
+						};
+						List<Review> reviews = await _reviewRepo.ListAsync(r => r.ClientId == client.Id, false);
+					//var checks = reviews.Select(x => (x.CheckNo, x.CreatedAtUtc)).Distinct();
+					var checks = reviews
+					.GroupBy(x => x.CheckNo)             // Group by CheckNo
+					.Select(g => g.First())              // Select the first item from each group
+					.Select(x => (x.CheckNo, x.CreatedAtUtc)) // Project to the desired structure
+					.ToList();
 
+
+					foreach (var check in checks)
+					{
+							var Checkdto = new CheckDTo
+							{
+								CheckNo = check.CheckNo,
+								CreatedAt = check.CreatedAtUtc,
+								Answers = new List<Answer>()  // Initialize the Answers list here
+							};
+
+
+
+
+
+
+							var answers = reviews.Where(x => x.CheckNo == check.CheckNo);
+						//List<Burk.DTO.Answer> getanswer = new List<Burk.DTO.Answer>();
+						foreach (var ans in answers)
+						{
+							Burk.DTO.Answer answer = new Burk.DTO.Answer();
+							answer.QuestionNumber = ans.QuestionNumber;
+							answer.AnswerType = ans.AnswerType;
+							answer.comment = ans.comment;
+							answer.rate = ans.rate;
+							answer.yesOrNO = ans.yesOrNO;
+							//getanswer.Add(answer);
+							Checkdto.Answers.Add(answer);
+
+						}
+						dto.checkDTos.Add(Checkdto);
+
+
+
+					}
+			all.Add(dto);
+
+		}
+				return all; 
 	}
 
 
-
 }
+
 
 

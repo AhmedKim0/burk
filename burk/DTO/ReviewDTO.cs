@@ -14,4 +14,5 @@ public class AnswerDTO
 	public string? comment { get; set; }
 
 	public bool? yesOrNO { get; set; }
+
 }

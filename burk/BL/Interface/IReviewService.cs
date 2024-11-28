@@ -15,5 +15,5 @@ Task<string> AddReview(SubmitReviewDTO dto);
 
 
 
- Task<List<Review>> GetAllReview();
+Task<List<GetAllReviewsDTO>> GetAllReview();
 }
