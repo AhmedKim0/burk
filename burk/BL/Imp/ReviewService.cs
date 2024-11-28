@@ -20,6 +20,7 @@ public class ReviewService: IReviewService
 	private readonly IAsyncRepository<Burk.DAL.Entity.Client> _clientRepo;
 	private readonly IAsyncRepository<WaitingList> _waitingListRepo;
 	private readonly IAsyncRepository<RecordedVisit> _recordedVisitRepo;
+	private readonly IAsyncRepository<Question> _questionRepo;
 
 	private readonly IMapper _mapper;
 
@@ -29,7 +30,9 @@ public class ReviewService: IReviewService
 		IMapper mapper,
 		IAsyncRepository<WaitingList> waitingListRepo,
 		IAsyncRepository<RecordedVisit> recordedVisit,
-		IAsyncRepository<Burk.DAL.Entity.Client> clientRepo
+		IAsyncRepository<Burk.DAL.Entity.Client> clientRepo,
+		IAsyncRepository<Burk.DAL.Entity.Question> questionRepo
+
 		)
 	{
 		_reviewRepo = reviewRepo ?? throw new ArgumentNullException(nameof(reviewRepo));
@@ -37,7 +40,8 @@ public class ReviewService: IReviewService
 		_waitingListRepo = waitingListRepo ?? throw new ArgumentNullException(nameof(waitingListRepo));
 		_recordedVisitRepo = recordedVisit ?? throw new ArgumentNullException(nameof(recordedVisit));
 		_clientRepo= clientRepo?? throw new ArgumentNullException(nameof(clientRepo));
-		
+		_questionRepo = questionRepo ?? throw new ArgumentNullException(nameof(questionRepo));
+
 	}
 	public async Task<Burk.DAL.Entity.Client> GetClientByPhone(string phone)
 	{
@@ -56,6 +60,7 @@ public class ReviewService: IReviewService
 			addClient.PhoneNumber = dto.PhoneNumber;
 			addClient.Name = dto.ClientName;
 			addClient.Email = dto.Email;
+			
 
 
 			client = await _clientRepo.AddAsync(addClient);
@@ -89,6 +94,7 @@ public class ReviewService: IReviewService
 				AnswerType = item.AnswerType,
 				QuestionNumber = item.QuestionNumber,
 				ClientId=client.Id,
+				
 
 			};
 			await _reviewRepo.AddAsync(review, false);
@@ -118,7 +124,10 @@ public class ReviewService: IReviewService
 	}
 	public async Task<List<GetAllReviewsDTO>> GetAllReview()
 	{
+		List<Question> question=await _questionRepo.ListAllAsync(false);
 		var all= new List < GetAllReviewsDTO >();
+		int qnumber;
+		
 		List <Client> clients = await _clientRepo.ListAllAsync(false);
 
 		foreach (Client client in clients)
@@ -154,20 +163,23 @@ public class ReviewService: IReviewService
 
 
 							var answers = reviews.Where(x => x.CheckNo == check.CheckNo);
+						qnumber =0;
 						//List<Burk.DTO.Answer> getanswer = new List<Burk.DTO.Answer>();
 						foreach (var ans in answers)
 						{
 							Burk.DTO.Answer answer = new Burk.DTO.Answer();
 							answer.QuestionNumber = ans.QuestionNumber;
+							answer.data = question[qnumber].data;
 							answer.AnswerType = ans.AnswerType;
 							answer.comment = ans.comment;
 							answer.rate = ans.rate;
 							answer.yesOrNO = ans.yesOrNO;
-							//getanswer.Add(answer);
-							Checkdto.Answers.Add(answer);
+					//getanswer.Add(answer);
+					Checkdto.Answers.Add(answer);
+					qnumber++;
 
-						}
-						dto.checkDTos.Add(Checkdto);
+				}
+				dto.checkDTos.Add(Checkdto);
 
 
 

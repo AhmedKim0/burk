@@ -25,6 +25,7 @@ public class Answer
 {
 	public int QuestionNumber { get; set; }
 	public QuestionType AnswerType { get; set; }
+	public string data { get; set; }
 	public int? rate { get; set; }
 	public string? comment { get; set; }
 
