@@ -75,7 +75,7 @@ public class ReviewService: IReviewService
 		}
 		if (client.Name != dto.ClientName || client.Email!=dto.Email)
 		{
-				client.Name = dto.ClientName;
+			client.Name = dto.ClientName;
 			client.Email = dto.Email;
 			await _clientRepo.UpdateAsync(client);
 		}
