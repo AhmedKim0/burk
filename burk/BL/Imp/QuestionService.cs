@@ -49,11 +49,7 @@ public class QuestionService: IQuestionService
 			{ 
 
 			question.data= questionDTO.data;
-			await _questionRepository.UpdateAsync(question);
-
-
-
-			return question;
+			return await _questionRepository.UpdateAsync(question);
 
 
 			}

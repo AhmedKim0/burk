@@ -52,7 +52,15 @@ public class ReviewService: IReviewService
 
 	}
 	public async Task<string> AddReview(SubmitReviewDTO dto)
-	{ Client client = await _clientRepo.FirstOrDefaultAsync(client => client.PhoneNumber == dto.PhoneNumber,false);
+	{ 
+		if(await _reviewRepo.AnyAsync(x=>x.CheckNo==dto.CheckNo))
+		return "this check is allready exist";
+
+		
+		
+		
+		
+		Client client = await _clientRepo.FirstOrDefaultAsync(client => client.PhoneNumber == dto.PhoneNumber,false);
 		if (client==null)
 		{
 			var addClient = new Client();
