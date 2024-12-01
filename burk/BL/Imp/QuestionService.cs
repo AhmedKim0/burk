@@ -23,8 +23,8 @@ public class QuestionService: IQuestionService
 	}
 	public async Task<Question> AddQuestion(AddQuestionDTO questionDTO)
 	{
-		int questionnumber = await _questionRepository.CountAllAsync();
-		questionnumber++;
+		int questionnumber = await _questionRepository.CountAllAsync()+1;
+		
 		
 		if (questionDTO != null && !(await _questionRepository.AnyAsync(q=>q.Id == questionDTO.QuestionNumber)))
 		{
