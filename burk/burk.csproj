@@ -31,8 +31,4 @@
     <ProjectReference Include="..\Burk.DAL\Burk.DAL.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\ReserveController\" />
-  </ItemGroup>
-
 </Project>
