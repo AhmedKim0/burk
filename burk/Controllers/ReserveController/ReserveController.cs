@@ -4,7 +4,7 @@ using Burk.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Burk.Controllers;
+namespace Burk.Controllers.ReserveController;
 [Route("api/[controller]")]
 [ApiController]
 public class ReserveController : ControllerBase
