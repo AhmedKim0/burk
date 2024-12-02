@@ -26,7 +26,7 @@ public class QuestionService: IQuestionService
 		int questionnumber = await _questionRepository.CountAllAsync()+1;
 		
 		
-		if (questionDTO != null && !(await _questionRepository.AnyAsync(q=>q.Id == questionDTO.QuestionNumber)))
+		if (questionDTO != null && !(await _questionRepository.AnyAsync(q=>q.Id == questionnumber)))
 		{
 			Question question = new Question()
 			{
