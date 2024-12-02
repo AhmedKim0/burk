@@ -4,6 +4,7 @@ using Burk.BL.Interface;
 using Burk.DAL.Entity;
 using Burk.DAL.Entity.Enums;
 using Burk.DAL.Repository.Interface;
+using Burk.DAL.ResponseModel;
 using Burk.DTO;
 
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -14,7 +15,7 @@ using System.Web.Http.ModelBinding;
 
 namespace Burk.BL.Imp;
 
-public class ReviewService: IReviewService
+public class ReviewService : IReviewService
 {
 	private readonly IAsyncRepository<Review> _reviewRepo;
 	private readonly IAsyncRepository<Burk.DAL.Entity.Client> _clientRepo;
@@ -43,20 +44,45 @@ public class ReviewService: IReviewService
 		_questionRepo = questionRepo ?? throw new ArgumentNullException(nameof(questionRepo));
 
 	}
-	public async Task<Burk.DAL.Entity.Client> GetClientByPhone(string phone)
+	public async Task<Response<Burk.DAL.Entity.Client>> GetClientByPhone(string phone)
 	{
-		Client client = await _clientRepo.FirstOrDefaultAsync(c => c.PhoneNumber == phone,false);
-		if (client != null)
-			return client;
-		else return new Burk.DAL.Entity.Client();
+		Response<Client> res = new Response<Client>(new Client());
+
+		try
+		{
+			Client client = await _clientRepo.FirstOrDefaultAsync(c => c.PhoneNumber == phone, false);
+			if (client != null)
+			{
+				res.Errors.Add(new Error { ErrorCode = "404", Message = "not found user" });
+				return res;
+			}
+
+			res.Data = client;
+
+			return res;
+		}
+		catch (Exception ex)
+		{
+
+			res.Errors.Add(new Error { Message = ex.Message, ErrorCode = "500" });
+			return res;
+
+		}
 
 	}
-	public async Task<string> AddReview(SubmitReviewDTO dto)
-	{ 
-		if(await _reviewRepo.AnyAsync(x=>x.CheckNo==dto.CheckNo))
-		return "this check is allready exist";
+	public async Task<Response<bool>> AddReview(SubmitReviewDTO dto)
+	{
+		Response<bool> res = new Response<bool>(default(bool));
 
-		
+		try
+
+		{if (await _reviewRepo.AnyAsync(x => x.CheckNo == dto.CheckNo)) { 
+
+			res.Errors.Add(new Error { ErrorCode = "400", Message = "this check is allready exist " });
+			res.Data=false;
+			return res;
+
+		}
 		
 		
 		
@@ -90,10 +116,7 @@ public class ReviewService: IReviewService
 		var visit = await _waitingListRepo.LastOrDefaultAsync(c => c.ClientId ==client.Id&&c.IsConfirmed== ClientState.Confirmed, false);
 		foreach (var item in dto.Answers)
 		{
-			if (dto.CheckNo == null)
-			{
-				return "CheckNo is empty";
-			}
+
 			Review review = new Review()
 			{
 				CheckNo = dto.CheckNo,
@@ -127,12 +150,21 @@ public class ReviewService: IReviewService
 		await _waitingListRepo.DeleteAsync(visit);
 		}
 		await _reviewRepo.SaveChangesAsync();
-		
-		return "done";
+		res.Data=false;
+			return res; }
 
+		catch (Exception ex)
+		{
+
+			res.Errors.Add(new Error { Message = ex.Message, ErrorCode = "500" });
+			return res;
+
+		}
 	}
-	public async Task<List<GetAllReviewsDTO>> GetAllReview()
+	public async Task<Response<List<GetAllReviewsDTO>>> GetAllReview()
 	{
+		var res = new Response<List<GetAllReviewsDTO>>(new List<GetAllReviewsDTO>() );
+		try { 
 		List<Question> question=await _questionRepo.ListAllAsync(false);
 		var all= new List < GetAllReviewsDTO >();
 		int qnumber;
@@ -196,7 +228,16 @@ public class ReviewService: IReviewService
 			all.Add(dto);
 
 		}
-				return all; 
+		res.Data= all;
+			return res; 
+	}
+		catch (Exception ex)
+		{
+
+			res.Errors.Add(new Error { Message = ex.Message, ErrorCode = "500" });
+			return res;
+
+		}
 	}
 
 

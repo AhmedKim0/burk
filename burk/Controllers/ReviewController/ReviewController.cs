@@ -1,4 +1,5 @@
 ﻿using Burk.BL.Interface;
+using Burk.DAL.ResponseModel;
 using Burk.DTO;
 
 using Microsoft.AspNetCore.Http;
@@ -19,26 +20,45 @@ public class ReviewController : ControllerBase
 	[HttpGet("GetClientByPhone")]
 	public async Task<IActionResult> GetClientByPhone(string phoneNumber)
 	{
-		if(!phoneNumber.IsNullOrEmpty()) 
-		{ var client = await _reviewService.GetClientByPhone(phoneNumber);
-			if (client != null) { return Ok(client); }
-			return NotFound();
+		if (!ModelState.IsValid)
+		{
+			var eres = new Response<bool>(default(bool));
+			eres.Errors.Add(new Error { ErrorCode = "400", Message = "Invalid data" });
+			return BadRequest(eres);
 		}
-		return BadRequest(ModelState);
+		var res = await _reviewService.GetClientByPhone(phoneNumber);
+			if(res.IsSuccess)
+			return Ok(res); 
+			
+			return Ok(res.Errors);
+
+
+		
+
 	}
 	[HttpPost("AddReview")]
 	public async Task<IActionResult> AddReview(SubmitReviewDTO dto)
 	{
-		if(ModelState.IsValid) {
-			return Ok(await _reviewService.AddReview(dto)); }
-		return BadRequest(ModelState);
+		if (!ModelState.IsValid)
+		{
+			var eres = new Response<bool>(default(bool));
+			eres.Errors.Add(new Error { ErrorCode = "400", Message = "Invalid data" });
+			return BadRequest(eres);
+		}
+		var res = await _reviewService.AddReview(dto);
+		return Ok(res);
 	}
 	[HttpGet("GetAllReview")]
 	public async Task<IActionResult> GetAllReview()
 	{
-		var result =await _reviewService.GetAllReview();
-			if (result != null) { 
-		return Ok(result); }
-			return BadRequest(ModelState);
+		if (!ModelState.IsValid)
+		{
+			var eres = new Response<bool>(default(bool));
+			eres.Errors.Add(new Error { ErrorCode = "400", Message = "Invalid data" });
+			return BadRequest(eres);
+		}
+		var res =await _reviewService.GetAllReview();
+		return Ok(res);
+
 	}
 }

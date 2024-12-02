@@ -13,6 +13,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Identity.Data;
+using Burk.DAL.ResponseModel;
 
 namespace Burk.Controllers
 {
@@ -34,6 +35,7 @@ namespace Burk.Controllers
 		[HttpPost("Register")]
 		public async Task<IActionResult> RegisterNewUser(RegistrationDTO user)
 		{
+			Response<bool> res = new Response<bool>(default(bool));
 			if (ModelState.IsValid)
 			{
 				AppUser appUser = new()
@@ -63,7 +65,8 @@ namespace Burk.Controllers
 					}
 
 
-					return Ok("Success");
+
+					return Ok(true);
 					
 				}
 				else

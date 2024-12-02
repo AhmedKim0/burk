@@ -1,19 +1,23 @@
 ﻿using AutoMapper;
 
+
+
 using Burk.BL.Interface;
 using Burk.DAL.Context;
 using Burk.DAL.Entity;
 using Burk.DAL.Entity.Enums;
 using Burk.DAL.Repository.Interface;
+using Burk.DAL.ResponseModel;
 using Burk.DTO;
 
 using Microsoft.EntityFrameworkCore;
 
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Burk.BL.Imp;
 
-public class ReserveService: IReserveService
+public class ReserveService : IReserveService
 {
 	private readonly IAsyncRepository<WaitingList> _waitngRepo;
 	private readonly IAsyncRepository<RecordedVisit> _tempRepo;
@@ -31,58 +35,80 @@ public class ReserveService: IReserveService
 		//_burkDbContext = burkDbContext;
 	}
 
-	public async Task<List<WaitingList>> GetWaitingListAsync()
+	public async Task<Response<List<WaitingList>>> GetWaitingListAsync()
+	{
+		Response<List<WaitingList>> res = new Response<List<WaitingList>>(new List<WaitingList>());
+
+		try
+		{ 
+		res.Data= await _waitngRepo.ListAllAsync(false);
+		return res; 
+			}
+		catch (Exception ex)
 		{
-		return await _waitngRepo.ListAllAsync(false);
+
+			res.Errors.Add(new Error { Message = ex.Message, ErrorCode = "500" });
+			return res;
+
+		}
 
 	}
-	public async Task<List<WaitingList>> GetAcceptedUserAsync()
-	{
-		return await _waitngRepo.ListAsync(x => x.IsAccepted == true, false);
+	//public async Task<List<WaitingList>> GetAcceptedUserAsync()
+	//{
+	//	return await _waitngRepo.ListAsync(x => x.IsAccepted == true, false);
 
-	}
+	//}
 
 
-	public async Task<string> AcceptUser(int id  ,int tablenumber)
+	//public async Task<bool> AcceptUser(int id  ,int tablenumber)
 
-	{
-		WaitingList waitingUser = await _waitngRepo.FirstOrDefaultAsync(x => x.Id == id, false);
+	//{
+	//	WaitingList waitingUser = await _waitngRepo.FirstOrDefaultAsync(x => x.Id == id, false);
  
-		var client = await _clientRepo.FirstOrDefaultAsync(i=>i.PhoneNumber== waitingUser.PhoneNumber);
-		if (!(waitingUser == null && client==null))
-		{
-			waitingUser.TableNumber=tablenumber;
-			waitingUser.IsAccepted = true;
+	//	var client = await _clientRepo.FirstOrDefaultAsync(i=>i.PhoneNumber== waitingUser.PhoneNumber);
+	//	if (!(waitingUser == null && client==null))
+	//	{
+	//		waitingUser.TableNumber=tablenumber;
+	//		waitingUser.IsAccepted = true;
 
 
 		
-			await _waitngRepo.UpdateAsync(waitingUser);
+	//		await _waitngRepo.UpdateAsync(waitingUser);
 
-			return "done";
-			}
-		return "client is not registed or client reservation not found";
+	//		return "done";
+	//		}
+	//	return "client is not registed or client reservation not found";
 
-	}
-	public async Task<string> UnAcceptUser(int id)
-	{
+	//}
+	//public async Task<bool> UnAcceptUser(int id)
+	//{
 
-		var accepted = await _waitngRepo.FirstOrDefaultAsync(c => c.Id == id,false);
-		if (accepted != null) { 
-		accepted.IsAccepted=false;
-		accepted.TableNumber=null;
+	//	var accepted = await _waitngRepo.FirstOrDefaultAsync(c => c.Id == id,false);
+	//	if (accepted != null) { 
+	//	accepted.IsAccepted=false;
+	//	accepted.TableNumber=null;
 
-		await _waitngRepo.UpdateAsync(accepted); 
-			return "done"; }
+	//	await _waitngRepo.UpdateAsync(accepted); 
+	//		return "done"; }
 			
-		return "not found client or accepted user";
+	//	return "not found client or accepted user";
 	
 
-	}
-	public async Task<string> ConfirmUser(int id, int tablenumber)
+	//}
+	public async Task<Response<bool>> ConfirmUser(int id, int tablenumber)
 
 	{
+		Response<bool> res = new Response<bool>(default(bool));
+
+
+
 		WaitingList waitingUser = await _waitngRepo.FirstOrDefaultAsync(x => x.Id == id, false);
-		if (waitingUser == null) { return "invalid waitinglist";}
+		try { 		if (waitingUser == null)
+		{
+			res.Errors.Add(new Error { Message = "not found user", ErrorCode = "400" });
+			return res;
+
+		}
 		var client = await _clientRepo.FirstOrDefaultAsync(i => i.PhoneNumber == waitingUser.PhoneNumber, false);
 		if (!(waitingUser == null && client == null))
 		{
@@ -93,15 +119,28 @@ public class ReserveService: IReserveService
 
 
 			await _waitngRepo.UpdateAsync(waitingUser);
+			res.Data=true;
 
-			return "done";
+			return res;
 		}
-		return "client is not registed or client reservation not found";
+		res.Errors.Add(new Error { Message = "client is not registed or client reservation not found", ErrorCode = "400" });
+		return res; 
+			}
+		catch (Exception ex)
+		{
+
+			res.Errors.Add(new Error { Message = ex.Message, ErrorCode = "500" });
+			return res;
+
+		}
 
 	}
-	public async Task<string> UnConfirmUser(int id)
+	public async Task<Response<bool>> UnConfirmUser(int id)
 	{
-		//var accpeted = await _acceptRepo.FirstOrDefaultAsync(x => x.Id == id);
+		Response<bool> res = new Response<bool>(default(bool));
+		//var accpeted = await _acceptRepo.FirstOrDefaultAsync(x => x.Id == id);	
+		try{
+
 		var Confirmed = await _waitngRepo.FirstOrDefaultAsync(c => c.Id == id,false);
 		if (Confirmed.IsConfirmed== ClientState.Confirmed)
 		{
@@ -110,17 +149,29 @@ public class ReserveService: IReserveService
 			Confirmed.IsConfirmed = 0;
 
 			await _waitngRepo.UpdateAsync(Confirmed);
-			return "done";
+			res.Data=true;
+			return res;
 		}
+		res.Errors.Add(new Error { Message = "not found client or not Confirmed user", ErrorCode = "400" });
 
-		return "not found client or Confirmed user";
+		return res ; }
+		catch (Exception ex)
+		{
+
+			res.Errors.Add(new Error { Message = ex.Message, ErrorCode = "500" });
+			return res;
+
+		}
 
 
 	}
 
 
-	public async Task<string> CancelUserWaiting(int id,bool Isleaving=false)// make if false allways
+	public async Task<Response<bool>> CancelUserWaiting(int id,bool Isleaving=false)// make if false allways
 	{
+		Response<bool> res = new Response<bool>(default(bool));
+		try { 
+
 		var user = await _waitngRepo.FirstOrDefaultAsync(w => w.Id == id, false);
 		if (user != null) {
 		if(Isleaving )
@@ -141,18 +192,30 @@ public class ReserveService: IReserveService
 			};
 			await _tempRepo.AddAsync(temp);
 			await _waitngRepo.DeleteAsync(user);
-				return "done";
+				res.Data= true;
+				return res;
 		}
 		user.IsConfirmed= ClientState.Canceled;
 		await _waitngRepo.UpdateAsync(user);
-			return "done";
+			res.Data= true;
+			return res;
 		}
-		return "failed";
+		res.Data= false;
+		return res; }
+		catch (Exception ex)
+		{
+
+			res.Errors.Add(new Error { Message = ex.Message, ErrorCode = "500" });
+			return res;
+
+		}
 	}
 
-	public async Task<string> EditAccepted(int id ,EditUserDTO userDTO)
+	public async Task<Response<bool>> EditAccepted(int id ,EditUserDTO userDTO)
 	{
-		
+		Response<bool> res = new Response<bool>(default(bool));
+		try { 
+
 		var user = await _waitngRepo.FirstOrDefaultAsync(u=>u.Id==id, false);
 		if (!(user == null)) { 
 		user.AttendanceTime = userDTO.AttendanceTime;
@@ -161,12 +224,22 @@ public class ReserveService: IReserveService
 		user.TableNumber=userDTO.TableNumber;
 		user.Visitors=userDTO.Visitors;
 		await _waitngRepo.UpdateAsync(user);
-			return"done";}
-		return "user not found";
+			res.Data = true;
+			return res;
+			}
+		res.Data= false;
+		return res; }
+		catch (Exception ex)
+		{
+
+			res.Errors.Add(new Error { Message = ex.Message, ErrorCode = "500" });
+			return res;
+
+		}
 
 
 
-		
+
 
 
 	}

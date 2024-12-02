@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using static System.Runtime.InteropServices.JavaScript.JSType;
+
 
 namespace Burk.DAL.ResponseModel;
 public class Response<T>
@@ -24,4 +24,9 @@ public class Response<T>
 	}
 	public T? Data { get; set; }
 	public List<Error>? Errors { get; set; }
+}
+public class Error
+{
+	public string ErrorCode { get; set; }
+	public string Message { get; set; }
 }

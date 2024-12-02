@@ -15,6 +15,7 @@ using Microsoft.OpenApi.Models;
 using Burk.BL.Interface;
 using Burk.BL.Imp;
 using Burk.DAL.Context.contextIdentity;
+using Burk.DAL.UnitOfWork;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,6 +49,7 @@ builder.Services.AddScoped<IAsyncRepository<Client>, Repository<Client>>();
 builder.Services.AddScoped<IAsyncRepository<RecordedVisit>, Repository<RecordedVisit>>();
 builder.Services.AddScoped<IAsyncRepository<Review>, Repository<Review>>();
 builder.Services.AddScoped<IAsyncRepository<Question>, Repository<Question>>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 
 

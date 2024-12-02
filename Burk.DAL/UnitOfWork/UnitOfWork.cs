@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 using static Burk.DAL.UnitOfWork.UnitOfWork;
 
 namespace Burk.DAL.UnitOfWork;
-internal class UnitOfWork
+public class UnitOfWork:IUnitOfWork
 {
 
 		private readonly BurkDbContext _context;
